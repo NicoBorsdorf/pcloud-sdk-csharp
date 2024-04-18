@@ -121,15 +121,15 @@ namespace pcloud_sdk_csharp.Controllers
         public async static Task<UploadedFile> UploadFile(UploadFileRequest req, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, baseURL + "uploadfile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var formData = new MultipartFormDataContent();
+            formData.Headers.Clear();
+            formData.Add(new StringContent("auth"), $"Bearer {token}");
 
-            request.Headers.Add("folderid", req.FolderId.ToString());
-            request.Headers.Add("file", req.UploadFile);
-            request.Headers.Add("filename", req.FileName);
+            formData.Add(new StringContent("folderid"), req.FolderId.ToString());
+            formData.Add(new StringContent("file"), req.UploadFile);
+            formData.Add(new StringContent("filename"), req.FileName);
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "uploadfile", formData);
 
             return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync()); ;
         }
