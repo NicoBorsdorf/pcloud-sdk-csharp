@@ -74,32 +74,34 @@ namespace pcloud_sdk_csharp.Requests
     }
 
     public class UploadFileRequest : BaseRequest
-    { 
-        public UploadFileRequest(int folderId, string fileName, string uploadFile)
+    {
+        public UploadFileRequest(int folderId, string fileName, byte[] uploadFile)
         {
             FolderId = folderId;
             FileName = fileName;
             UploadFile = uploadFile;
         }
 
-        public UploadFileRequest(int folderId, string fileName, Stream uploadFile)
+        public UploadFileRequest(int folderId, string fileName, MemoryStream uploadFile)
         {
-            StreamReader sr = new StreamReader(uploadFile);
             FolderId = folderId;
             FileName = fileName;
-            UploadFile = sr.ReadToEnd();
+            UploadFile = uploadFile.ToArray();
         }
 
-        public UploadFileRequest(int folderId, string fileName, StreamReader uploadFile)
+        public UploadFileRequest(int folderId, string fileName, Stream uploadFile)
         {
+            MemoryStream ms = new();
+            uploadFile.CopyTo(ms);
+
             FolderId = folderId;
             FileName = fileName;
-            UploadFile = uploadFile.ReadToEnd();
+            UploadFile = ms.ToArray();
         }
 
         public int FolderId { get; set; }
         public string FileName { get; set; }
-        public string UploadFile { get; set; }
+        public byte[] UploadFile { get; set; }
     }
 
     public class BaseRequest
@@ -116,155 +118,94 @@ namespace pcloud_sdk_csharp.Responses
     // Files
     public class UploadedFile : Response
     {
-        public UploadedFile(int result, int[] fileIds, FileMetadata[] metadata) : base(result)
-        {
-            FileIds = fileIds;
-            Metadata = metadata;
-        }
-
-        public int[] FileIds { get; set; }
-        public FileMetadata[] Metadata { get; set; }
+        public List<int>? fileids { get; set; }
+        public List<FileMetadata>? metadata { get; set; }
     }
 
     // Folders
     public class Folder : Response
     {
-        public Folder(int result, bool? created, string? id, FolderMetadata? metadata) : base(result)
-        {
-            Created = created;
-            Id = id;
-            Metadata = metadata;
-        }
-
-        public bool? Created { get; set; }
-        public string? Id { get; set; }
-        public FolderMetadata? Metadata { get; set; }
+        public bool? created { get; set; }
+        public string? id { get; set; }
+        public FolderMetadata? metadata { get; set; }
     }
 
     public class DeleteFolder : Response
     {
-        public DeleteFolder(int result, int deletedFiles, int deletedFolders) : base(result)
-        {
-
-            DeletedFiles = deletedFiles;
-            DeletedFolders = deletedFolders;
-        }
-
-        public int DeletedFiles { get; set; }
-        public int DeletedFolders { get; set; }
+        public int deletedFiles { get; set; }
+        public int deletedFolders { get; set; }
     }
 
     public class Response
     {
-        public Response(int result)
-        {
-            Result = result;
-            switch (Result)
-            {
-                case 1000:
-                    Message = "Log in required.";
-                    break;
-                case 2000:
-                    Message = "Log in failed.";
-                    break;
-                case 2001:
-                    Message = "Invalid file/ folder name.";
-                    break;
-                case 2003:
-                    Message = "Access denied. You do not have permissions to preform this operation.";
-                    break;
-                case 2005:
-                    Message = "Directory does not exist.";
-                    break;
-                case 2008:
-                    Message = "User is over quota.";
-                    break;
-                case 2041:
-                    Message = "Connection broken.";
-                    break;
-                case 4000:
-                    Message = "Too many login tries from this IP address.";
-                    break;
-                case 5000:
-                    Message = "Internal error. Try again later.";
-                    break;
-                case 5001:
-                    Message = "Internal upload error.";
-                    break;
-                default:
-                    Message = null;
-                    break;
-            }
-        }
-
-        public int Result { get; set; }
-        public string? Message { get; set; }
+        public int result { get; set; }
+        public string? error { get; set; }
     }
 
     // Metadata and all super categories
     public class Metadata
     {
-        public int ParentFolderId { get; set; }
-        public bool IsFolder { get; set; }
-        public bool IsMine { get; set; }
-        public bool IsShared { get; set; }
-        public string Name { get; set; } = "";
-        public string Id { get; set; } = "";
-        public string DeletedFileId { get; set; } = "";
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public string Icon { get; set; } = "";
-        public int Category { get; set; }
-        public bool Thumb { get; set; }
-        public int Size { get; set; }
-        public string ContentType { get; set; } = "";
-        public int Hash { get; set; }
-        public Array? Contents { get; set; }
-        public bool IsDeleted { get; set; }
-        public string Path { get; set; } = "";
+        public int parentfolderid { get; set; }
+        public bool isfolder { get; set; }
+        public bool ismine { get; set; }
+        public bool isshared { get; set; }
+        public string name { get; set; }
+        public string id { get; set; }
+        public string deletedfileid { get; set; }
+        public string created { get; set; }
+        public string modified { get; set; }
+        public string icon { get; set; }
+        public int category { get; set; }
+        public bool thumb { get; set; }
+        public int size { get; set; }
+        public string contenttype { get; set; }
+        public int hash { get; set; }
+        public List<Metadata>? contents { get; set; }
+        public bool isDeleted { get; set; }
+        public string path { get; set; }
     }
 
     public class FileMetadata : Metadata
     {
         // in case of file -> fileid is returned
-        public int FileId { get; set; }
+        public int fileid { get; set; }
 
     }
 
     public class FolderMetadata : Metadata
     {
         // in case of folder -> folderid is returned
-        public int FolderId { get; set; }
+        public int folderid { get; set; }
 
     }
 
     public class ImageMetadata : Metadata
     {
         // relevant for image files
-        public int? Width { get; set; }
-        public int? Height { get; set; }
+        public int? width { get; set; }
+        public int? weight { get; set; }
     }
 
     public class AudioMetadata : Metadata
     {
-        public string? Artist { get; set; }
-        public string? Album { get; set; }
-        public string? Title { get; set; }
-        public string? Genre { get; set; }
-        public string? TrackNo { get; set; }
+        public string? artist { get; set; }
+        public string? album { get; set; }
+        public string? title { get; set; }
+        public string? genre { get; set; }
+        public string? trackNo { get; set; }
     }
 
     public class VideoMetadata : Metadata
     {
-        public int? Width { get; set; }
-        public int? Height { get; set; }
-        public float? Duration { get; set; }
-        public float? Fps { get; set; }
-        public string? VideoCodec { get; set; }
-        public string? AudioCodec { get; set; }
-        public int? VideoVitrate { get; set; }
-        public int? AudioVitrate { get; set; }
-        public int? AudioSamplerate { get; set; }
-        public int? Rotate { get; set; }
+        public int? width { get; set; }
+        public int? height { get; set; }
+        public float? duration { get; set; }
+        public float? fps { get; set; }
+        public string? videocodec { get; set; }
+        public string? audiocodec { get; set; }
+        public int? videobitrate { get; set; }
+        public int? audiovitrate { get; set; }
+        public int? audiosamplerate { get; set; }
+        public int? rotate { get; set; }
     }
 }

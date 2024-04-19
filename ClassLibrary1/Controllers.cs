@@ -115,24 +115,28 @@ namespace pcloud_sdk_csharp.Controllers
 
     public class FileController
     {
-        private static readonly string baseURL = @"https://eapi.pcloud.com/";
+        private static readonly string baseURL = "https://eapi.pcloud.com/";
         private static readonly HttpClient client = new();
 
-        public async static Task<UploadedFile> UploadFile(UploadFileRequest req, string token)
+        public async static Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
         {
             var formData = new MultipartFormDataContent();
-            formData.Headers.Add("auth", $"Bearer {token}");
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
 
-            formData.Add(new StringContent("folderid"), req.FolderId.ToString());
-            formData.Add(new StringContent("file"), req.UploadFile);
-            formData.Add(new StringContent("filename"), req.FileName);
+            formData.Add(new StringContent(req.FolderId.ToString()), "folderid");
+            formData.Add(new ByteArrayContent(req.UploadFile), "file");
+            formData.Add(new StringContent(req.FileName), "filename");
 
-            var response = await client.PostAsync(baseURL + "uploadfile", formData);
+            Console.WriteLine(formData.ToString());
+            Console.WriteLine("formdata " + JsonSerializer.Serialize(formData));
 
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
+            HttpResponseMessage response = await client.PostAsync(baseURL + "uploadfile", formData);
 
-            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync()); ;
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
+
         /*
         public async Task<UploadedFile> UploadProgress(string token)
         {
