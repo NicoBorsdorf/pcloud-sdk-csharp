@@ -75,7 +75,7 @@ namespace pcloud_sdk_csharp.Requests
 
     public class UploadFileRequest : BaseRequest
     {
-        public UploadFileRequest(int folderId, string fileName, Stream uploadFile, string? progressHash, bool? noPartial = true, bool? renameIfExists = true)
+        public UploadFileRequest(int folderId, string fileName, Stream uploadFile, string? progressHash = "", bool? noPartial = true, bool? renameIfExists = true)
         {
             FolderId = folderId;
             FileName = fileName;
@@ -109,6 +109,15 @@ namespace pcloud_sdk_csharp.Responses
     {
         public List<long>? fileids { get; set; }
         public List<FileMetadata>? metadata { get; set; }
+    }
+
+    public class UploadProgress
+    {
+        public long Total { get; set; }
+        public long Uploaded { get; set; }
+        public string CurrentFile { get; set; }
+        public List<FileMetadata> Files { get; set; }
+        public bool Finished { get; set; }
     }
 
     // Folders

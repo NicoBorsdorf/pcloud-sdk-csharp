@@ -4,6 +4,8 @@ using System.Text;
 using pcloud_sdk_csharp.Requests;
 using pcloud_sdk_csharp.Responses;
 using System.Text.Json;
+using System.Net.NetworkInformation;
+using Microsoft.VisualBasic;
 
 namespace pcloud_sdk_csharp.Controllers
 {
@@ -120,9 +122,9 @@ namespace pcloud_sdk_csharp.Controllers
 
         public static async Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
         {
+            client.CancelPendingRequests();
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(req.FolderId.ToString()), "folderid");
@@ -136,21 +138,119 @@ namespace pcloud_sdk_csharp.Controllers
             };
             formData.Add(fileContent);
 
+            var response = await client.PostAsync(baseURL + "uploadfile", formData);
 
-            HttpResponseMessage response = await client.PostAsync(baseURL + "uploadfile", formData);
-
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            return JsonSerializer.Deserialize<UploadedFile>(responseContent);
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
 
-        /*
-        public async Task<UploadedFile> UploadProgress(string token)
+        public static async Task<UploadProgress> UploadProgress(string hash, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "uploadprogress");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.CancelPendingRequests();
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            header.Add("hash", hash);
+
+            var response = await client.GetAsync(baseURL + "uplaodprogress");
+
+            return JsonSerializer.Deserialize<UploadProgress>(await response.Content.ReadAsStringAsync());
+        }
+
+
+        public static async Task<UploadedFile> DownloadFile(string url, string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("url", string.Join(" ", url));
+
+            var response = await client.GetAsync(baseURL + "downloadfile");
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> DownloadFileAsync(Array url, string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("url", string.Join(" ", url));
+
+            var response = await client.GetAsync(baseURL + "downloadfileasync");
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> CopyFile(long fileId, long toFolderId, string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("fileid", fileId.ToString());
+            headers.Add("tofolderid", toFolderId.ToString());
+
+            var response = await client.PostAsync(baseURL + "copyfile", null);
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> ChecksumFile(long fileId, string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("fileid", fileId.ToString());
+
+            var response = await client.GetAsync(baseURL + "checksumfile");
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> DeleteFile(long fileId, string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("fileid", fileId.ToString());
+
+            var response = await client.DeleteAsync(baseURL + "deletefile");
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> RenameFile(string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("fileid", fileId.ToString());
+
+            var response = await client.SendAsync(request);
+
+            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+        }
+        public static async Task<UploadedFile> Stat(string token)
+        {
+            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             request.Content = new StringContent(, Encoding.UTF8, "application/json");
 
@@ -158,97 +258,6 @@ namespace pcloud_sdk_csharp.Controllers
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
-        public async Task<UploadedFile> DownloadFile(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "downloadfile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> DownloadFileAsync(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "downloadfileasync");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> CopyFile(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, baseURL + "copyfile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> ChecksumFile(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "checksumfile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> DeleteFile(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Delete, baseURL + "deletefile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> RenameFile(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Put, baseURL + "renamefile");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public async Task<UploadedFile> Stat(string token)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "stat");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }*/
     }
 
 }
