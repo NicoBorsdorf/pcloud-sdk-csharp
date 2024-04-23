@@ -113,28 +113,35 @@ namespace pcloud_sdk_csharp.Controllers
         }
     }
 
-    public class FileController
+    public static class FileController
     {
         private static readonly string baseURL = "https://eapi.pcloud.com/";
         private static readonly HttpClient client = new();
 
-        public async static Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
+        public static async Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
         {
-            var formData = new MultipartFormDataContent();
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(req.FolderId.ToString()), "folderid");
-            formData.Add(new ByteArrayContent(req.UploadFile), "file");
             formData.Add(new StringContent(req.FileName), "filename");
 
-            Console.WriteLine(formData.ToString());
-            Console.WriteLine("formdata " + JsonSerializer.Serialize(formData));
+            var fileContent = new StreamContent(req.UploadFile);
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"files\"",
+                FileName = $"\"{req.FileName}\"",
+            };
+            formData.Add(fileContent);
+
 
             HttpResponseMessage response = await client.PostAsync(baseURL + "uploadfile", formData);
 
-            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<UploadedFile>(responseContent);
         }
 
         /*

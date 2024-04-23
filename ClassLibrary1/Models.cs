@@ -75,33 +75,22 @@ namespace pcloud_sdk_csharp.Requests
 
     public class UploadFileRequest : BaseRequest
     {
-        public UploadFileRequest(int folderId, string fileName, byte[] uploadFile)
+        public UploadFileRequest(int folderId, string fileName, Stream uploadFile, string? progressHash, bool? noPartial = true, bool? renameIfExists = true)
         {
             FolderId = folderId;
             FileName = fileName;
             UploadFile = uploadFile;
-        }
-
-        public UploadFileRequest(int folderId, string fileName, MemoryStream uploadFile)
-        {
-            FolderId = folderId;
-            FileName = fileName;
-            UploadFile = uploadFile.ToArray();
-        }
-
-        public UploadFileRequest(int folderId, string fileName, Stream uploadFile)
-        {
-            MemoryStream ms = new();
-            uploadFile.CopyTo(ms);
-
-            FolderId = folderId;
-            FileName = fileName;
-            UploadFile = ms.ToArray();
+            ProgressHash = progressHash;
+            RenameIfExists = renameIfExists;
+            NoPartial = noPartial;
         }
 
         public int FolderId { get; set; }
         public string FileName { get; set; }
-        public byte[] UploadFile { get; set; }
+        public Stream UploadFile { get; set; }
+        public string? ProgressHash { get; set; }
+        public bool? NoPartial { get; set; }
+        public bool? RenameIfExists { get; set; }
     }
 
     public class BaseRequest
@@ -118,7 +107,7 @@ namespace pcloud_sdk_csharp.Responses
     // Files
     public class UploadedFile : Response
     {
-        public List<int>? fileids { get; set; }
+        public List<long>? fileids { get; set; }
         public List<FileMetadata>? metadata { get; set; }
     }
 
@@ -145,37 +134,37 @@ namespace pcloud_sdk_csharp.Responses
     // Metadata and all super categories
     public class Metadata
     {
-        public int parentfolderid { get; set; }
-        public bool isfolder { get; set; }
-        public bool ismine { get; set; }
-        public bool isshared { get; set; }
-        public string name { get; set; }
-        public string id { get; set; }
-        public string deletedfileid { get; set; }
-        public string created { get; set; }
-        public string modified { get; set; }
-        public string icon { get; set; }
-        public int category { get; set; }
-        public bool thumb { get; set; }
-        public int size { get; set; }
-        public string contenttype { get; set; }
-        public int hash { get; set; }
+        public long? parentfolderid { get; set; }
+        public bool? isfolder { get; set; }
+        public bool? ismine { get; set; }
+        public bool? isshared { get; set; }
+        public string? name { get; set; }
+        public string? id { get; set; }
+        public string? deletedfileid { get; set; }
+        public string? created { get; set; }
+        public string? modified { get; set; }
+        public string? icon { get; set; }
+        public long? category { get; set; }
+        public bool? thumb { get; set; }
+        public long? size { get; set; }
+        public string? contenttype { get; set; }
+        public long? hash { get; set; }
         public List<Metadata>? contents { get; set; }
-        public bool isDeleted { get; set; }
-        public string path { get; set; }
+        public bool? isDeleted { get; set; }
+        public string? path { get; set; }
     }
 
     public class FileMetadata : Metadata
     {
         // in case of file -> fileid is returned
-        public int fileid { get; set; }
+        public long? fileid { get; set; }
 
     }
 
     public class FolderMetadata : Metadata
     {
         // in case of folder -> folderid is returned
-        public int folderid { get; set; }
+        public long folderid { get; set; }
 
     }
 
@@ -204,7 +193,7 @@ namespace pcloud_sdk_csharp.Responses
         public string? videocodec { get; set; }
         public string? audiocodec { get; set; }
         public int? videobitrate { get; set; }
-        public int? audiovitrate { get; set; }
+        public int? audiobitrate { get; set; }
         public int? audiosamplerate { get; set; }
         public int? rotate { get; set; }
     }
