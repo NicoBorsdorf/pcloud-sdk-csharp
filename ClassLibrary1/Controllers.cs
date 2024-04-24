@@ -14,104 +14,126 @@ namespace pcloud_sdk_csharp.Controllers
         private readonly string baseURL = @"https://eapi.pcloud.com/";
         private readonly HttpClient client = new();
 
-        public async Task<Folder> CearteFolder(CreateFolderRequest req, string token)
+        public async Task<Folder> CearteFolder(long folderId, string name, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, baseURL + "createFolder");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent(req.ToJson(), Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
+            header.Add("name", name);
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "createfolder", null);
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
 
         }
 
-        public async Task<Folder> CearteFolderIfNotExists(CreateFolderRequest req, string token)
+        public async Task<Folder> CearteFolderIfNotExists(long folderId, string name, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, baseURL + "createfolderifnotexists");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent(req.ToJson(), Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
+            header.Add("name", name);
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "createfolderifnotexists", null);
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
 
         }
 
-        public async Task<Folder> ListFolder(ListFolderRequest req, string token)
+        public async Task<Folder> ListFolder(long folderId, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "listfolder");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent(req.ToJson(), Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
 
-            var response = await client.SendAsync(request);
+            var response = await client.GetAsync(baseURL + "listfolder");
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<Folder> RenameFolder(RenameFolderRequest req, string token)
+        public async Task<Folder> RenameFolder(long folderId, string toName, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "renamefolder");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent(req.ToJson(), Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
+            header.Add("toName", toName);
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "renamefolder", null);
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
+        }
+        public async Task<Folder> MoveFolder(long folderId, long toFolderId, string token)
+        {
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            header.Add("folderid", folderId.ToString());
+            header.Add("tofolderid", toFolderId.ToString());
+
+            var response = await client.PostAsync(baseURL + "renamefolder", null);
+
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<Folder> DeleteFolder(int folderId, string token)
+
+        public async Task<Folder> DeleteFolder(long folderId, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "deletefolder");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent($"{{folderid: {folderId}}}", Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "deletefolder", null);
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
 
         public async Task<DeleteFolder> DeleteFolderRecursive(int folderId, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "deletefolderrecursive");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent($"{{folderid: {folderId}}}", Encoding.UTF8, "application/json");
+            header.Add("folderid", folderId.ToString());
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "deletefolderrecursive", null);
 
-            return await response.Content.ReadFromJsonAsync<DeleteFolder>();
+            return JsonSerializer.Deserialize<DeleteFolder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<Folder> CopyFolder(int folderId, int toFolderId, string token)
+        public async Task<Folder> CopyFolder(CopyFolderRequest req, string token)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, baseURL + "copyfolder");
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            request.Content = new StringContent($"{{ folderid: {folderId}, tofolderid: {toFolderId} }}", Encoding.UTF8, "application/json");
+            header.Add("folderid", req.FolderId.ToString());
+            header.Add("tofolderid", req.ToFolderId.ToString());
+            header.Add("noover", req.NoOver.ToString());
+            header.Add("skipexisting", req.SkipExisting.ToString());
+            header.Add("copycontentonly", req.CopyContentOnly.ToString());
 
-            var response = await client.SendAsync(request);
+            var response = await client.PostAsync(baseURL + "copyfolder", null);
 
-            return await response.Content.ReadFromJsonAsync<Folder>();
+            return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
     }
 
@@ -122,13 +144,16 @@ namespace pcloud_sdk_csharp.Controllers
 
         public static async Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
         {
-            client.CancelPendingRequests();
-            client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var header = client.DefaultRequestHeaders;
+            header.Clear();
+            header.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(req.FolderId.ToString()), "folderid");
             formData.Add(new StringContent(req.FileName), "filename");
+            formData.Add(new StringContent(req.NoPartial.ToString()), "nopartial");
+            formData.Add(new StringContent(req.RenameIfExists.ToString()), "renameifexists");
+            if (req.ProgressHash != null) formData.Add(new StringContent(req.ProgressHash), "´progresshash");
 
             var fileContent = new StreamContent(req.UploadFile);
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
@@ -145,7 +170,6 @@ namespace pcloud_sdk_csharp.Controllers
 
         public static async Task<UploadProgress> UploadProgress(string hash, string token)
         {
-            client.CancelPendingRequests();
             var header = client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -161,7 +185,6 @@ namespace pcloud_sdk_csharp.Controllers
 
         public static async Task<UploadedFile> DownloadFile(string url, string token)
         {
-            client.CancelPendingRequests();
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -171,11 +194,10 @@ namespace pcloud_sdk_csharp.Controllers
 
             var response = await client.GetAsync(baseURL + "downloadfile");
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
         public static async Task<UploadedFile> DownloadFileAsync(Array url, string token)
         {
-            client.CancelPendingRequests();
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -185,11 +207,10 @@ namespace pcloud_sdk_csharp.Controllers
 
             var response = await client.GetAsync(baseURL + "downloadfileasync");
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
         public static async Task<UploadedFile> CopyFile(long fileId, long toFolderId, string token)
         {
-            client.CancelPendingRequests();
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -200,11 +221,10 @@ namespace pcloud_sdk_csharp.Controllers
 
             var response = await client.PostAsync(baseURL + "copyfile", null);
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
         public static async Task<UploadedFile> ChecksumFile(long fileId, string token)
         {
-            client.CancelPendingRequests();
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -214,11 +234,10 @@ namespace pcloud_sdk_csharp.Controllers
 
             var response = await client.GetAsync(baseURL + "checksumfile");
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
         public static async Task<UploadedFile> DeleteFile(long fileId, string token)
         {
-            client.CancelPendingRequests();
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -228,11 +247,25 @@ namespace pcloud_sdk_csharp.Controllers
 
             var response = await client.DeleteAsync(baseURL + "deletefile");
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
-        public static async Task<UploadedFile> RenameFile(string token)
+
+        public static async Task<UploadedFile> RenameFile(long fileId, string toName, string token)
         {
-            client.CancelPendingRequests();
+            var headers = client.DefaultRequestHeaders;
+            headers.Clear();
+            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            headers.Add("fileid", fileId.ToString());
+            headers.Add("toName", toName);
+
+            var response = await client.PostAsync(baseURL + "renamefile", null);
+
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
+        }
+        public static async Task<UploadedFile> Stat(long fileId, string token)
+        {
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -240,23 +273,9 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("fileid", fileId.ToString());
 
-            var response = await client.SendAsync(request);
+            var response = await client.GetAsync(baseURL + "stat");
 
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
-        }
-        public static async Task<UploadedFile> Stat(string token)
-        {
-            client.CancelPendingRequests();
-            var headers = client.DefaultRequestHeaders;
-            headers.Clear();
-            headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            request.Content = new StringContent(, Encoding.UTF8, "application/json");
-
-            var response = await client.SendAsync(request);
-
-            return await response.Content.ReadFromJsonAsync<UploadedFile>();
+            return JsonSerializer.Deserialize<UploadedFile>(await response.Content.ReadAsStringAsync());
         }
     }
 

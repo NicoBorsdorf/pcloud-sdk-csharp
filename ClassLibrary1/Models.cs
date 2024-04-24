@@ -2,34 +2,18 @@
 
 namespace pcloud_sdk_csharp.Requests
 {
-    public class CreateFolderRequest : BaseRequest
-    {
-        public CreateFolderRequest(string path, int folderId, string name)
-        {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
-            FolderId = folderId;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
-
-        public string Path { get; set; } = "";
-        public int FolderId { get; set; }
-        public string Name { get; set; } = "";
-    }
-
     public class ListFolderRequest : BaseRequest
     {
-        public ListFolderRequest(string path, int folderId, int? recursive, int? showDeleted, int? noFiles, int? noShares)
+        public ListFolderRequest(long folderId, bool recursive = false, bool showDeleted = false, bool noFiles = false, bool noShares = false)
         {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
             FolderId = folderId;
-            Recursive = recursive;
-            ShowDeleted = showDeleted;
-            NoFiles = noFiles;
-            NoShares = noShares;
+            Recursive = recursive ? 1 : 0;
+            ShowDeleted = showDeleted ? 1 : 0;
+            NoFiles = noFiles ? 1 : 0;
+            NoShares = noShares ? 1 : 0;
         }
 
-        public string Path { get; set; } = "";
-        public int FolderId { get; set; }
+        public long FolderId { get; set; }
         public int? Recursive { get; set; }
         public int? ShowDeleted { get; set; }
         public int? NoFiles { get; set; }
@@ -39,35 +23,31 @@ namespace pcloud_sdk_csharp.Requests
 
     public class RenameFolderRequest : BaseRequest
     {
-        public RenameFolderRequest(int folderId, string? path, string? toPath, int toFolderId, string? toName)
+        public RenameFolderRequest(long folderId, long? toFolderId, string toName)
         {
             FolderId = folderId;
-            Path = path;
-            ToPath = toPath;
-            ToFolderId = toFolderId;
+            ToFolderId = toFolderId ?? folderId;
             ToName = toName;
         }
 
-        public int FolderId { get; set; }
-        public string? Path { get; set; }
-        public string? ToPath { get; set; }
-        public int ToFolderId { get; set; }
+        public long FolderId { get; set; }
+        public long ToFolderId { get; set; }
         public string? ToName { get; set; }
     }
 
     public class CopyFolderRequest : BaseRequest
     {
-        public CopyFolderRequest(int folderId, int toFolderId, int? noOver, int? skipExisting, int? copyContentOnly)
+        public CopyFolderRequest(long folderId, long toFolderId, bool noOver = false, bool skipExisting = false, bool copyContentOnly = false)
         {
             FolderId = folderId;
             ToFolderId = toFolderId;
-            NoOver = noOver;
-            SkipExisting = skipExisting;
-            CopyContentOnly = copyContentOnly;
+            NoOver = noOver ? 1 : 0;
+            SkipExisting = skipExisting ? 1 : 0;
+            CopyContentOnly = copyContentOnly ? 1 : 0;
         }
 
-        public int FolderId { get; set; }
-        public int ToFolderId { get; set; }
+        public long FolderId { get; set; }
+        public long ToFolderId { get; set; }
         public int? NoOver { get; set; }
         public int? SkipExisting { get; set; }
         public int? CopyContentOnly { get; set; }
@@ -75,22 +55,22 @@ namespace pcloud_sdk_csharp.Requests
 
     public class UploadFileRequest : BaseRequest
     {
-        public UploadFileRequest(int folderId, string fileName, Stream uploadFile, string? progressHash = "", bool? noPartial = true, bool? renameIfExists = true)
+        public UploadFileRequest(long folderId, string fileName, Stream uploadFile, string? progressHash = null, bool noPartial = true, bool renameIfExists = true)
         {
             FolderId = folderId;
             FileName = fileName;
             UploadFile = uploadFile;
             ProgressHash = progressHash;
-            RenameIfExists = renameIfExists;
-            NoPartial = noPartial;
+            RenameIfExists = renameIfExists ? 1 : 0;
+            NoPartial = noPartial ? 1 : 0;
         }
 
-        public int FolderId { get; set; }
+        public long FolderId { get; set; }
         public string FileName { get; set; }
         public Stream UploadFile { get; set; }
         public string? ProgressHash { get; set; }
-        public bool? NoPartial { get; set; }
-        public bool? RenameIfExists { get; set; }
+        public int NoPartial { get; set; }
+        public int RenameIfExists { get; set; }
     }
 
     public class BaseRequest
@@ -102,6 +82,7 @@ namespace pcloud_sdk_csharp.Requests
     }
 }
 
+// response properties are written in small letters due to json mapping of ws reponse
 namespace pcloud_sdk_csharp.Responses
 {
     // Files
@@ -113,11 +94,11 @@ namespace pcloud_sdk_csharp.Responses
 
     public class UploadProgress
     {
-        public long Total { get; set; }
-        public long Uploaded { get; set; }
-        public string CurrentFile { get; set; }
-        public List<FileMetadata> Files { get; set; }
-        public bool Finished { get; set; }
+        public long total { get; set; }
+        public long uploaded { get; set; }
+        public string currentfile { get; set; }
+        public List<FileMetadata> files { get; set; }
+        public bool finished { get; set; }
     }
 
     // Folders
@@ -130,8 +111,8 @@ namespace pcloud_sdk_csharp.Responses
 
     public class DeleteFolder : Response
     {
-        public int deletedFiles { get; set; }
-        public int deletedFolders { get; set; }
+        public int deletedfiles { get; set; }
+        public int deletedfolders { get; set; }
     }
 
     public class Response
@@ -159,7 +140,7 @@ namespace pcloud_sdk_csharp.Responses
         public string? contenttype { get; set; }
         public long? hash { get; set; }
         public List<Metadata>? contents { get; set; }
-        public bool? isDeleted { get; set; }
+        public bool? isdeleted { get; set; }
         public string? path { get; set; }
     }
 
@@ -190,7 +171,7 @@ namespace pcloud_sdk_csharp.Responses
         public string? album { get; set; }
         public string? title { get; set; }
         public string? genre { get; set; }
-        public string? trackNo { get; set; }
+        public string? trackno { get; set; }
     }
 
     public class VideoMetadata : Metadata
