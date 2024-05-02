@@ -89,7 +89,7 @@ namespace pcloud_sdk_csharp.Responses
     public class UploadedFile : Response
     {
         public List<long>? fileids { get; set; }
-        public List<FileMetadata>? metadata { get; set; }
+        public List<Metadata>? metadata { get; set; }
     }
 
     public class UploadProgress
@@ -97,16 +97,16 @@ namespace pcloud_sdk_csharp.Responses
         public long total { get; set; }
         public long uploaded { get; set; }
         public string currentfile { get; set; }
-        public List<FileMetadata> files { get; set; }
+        public List<Metadata> files { get; set; }
         public bool finished { get; set; }
     }
 
     // Folders
     public class Folder : Response
     {
-        public bool? created { get; set; }
-        public string? id { get; set; }
-        public FolderMetadata? metadata { get; set; }
+        public bool created { get; set; }
+        public string id { get; set; }
+        public Metadata metadata { get; set; }
     }
 
     public class DeleteFolder : Response
@@ -124,67 +124,48 @@ namespace pcloud_sdk_csharp.Responses
     // Metadata and all super categories
     public class Metadata
     {
-        public long? parentfolderid { get; set; }
-        public bool? isfolder { get; set; }
-        public bool? ismine { get; set; }
-        public bool? isshared { get; set; }
-        public string? name { get; set; }
-        public string? id { get; set; }
-        public string? deletedfileid { get; set; }
-        public string? created { get; set; }
-        public string? modified { get; set; }
-        public string? icon { get; set; }
-        public long? category { get; set; }
-        public bool? thumb { get; set; }
-        public long? size { get; set; }
-        public string? contenttype { get; set; }
-        public long? hash { get; set; }
+        public long parentfolderid { get; set; }
+        public long? fileid { get; set; }
+        public long? folderid { get; set; }
+        public bool isfolder { get; set; }
+        //public bool ismine { get; set; }
+        //public bool isshared { get; set; }
+        public string name { get; set; }
+        //public string id { get; set; }
+        //public string? deletedfileid { get; set; }
+        public string created { get; set; }
+        public string modified { get; set; }
+        //public string icon { get; set; }
+        //public long category { get; set; }
+        //public bool thumb { get; set; }
+        public long size { get; set; }
+        //public string contenttype { get; set; }
+        //public long hash { get; set; }
         public List<Metadata>? contents { get; set; }
-        public bool? isdeleted { get; set; }
-        public string? path { get; set; }
-    }
+        //public bool isdeleted { get; set; }
+        //public string path { get; set; }
 
-    public class FileMetadata : Metadata
-    {
-        // in case of file -> fileid is returned
-        public long fileid { get; set; }
+        // For image files
+        //public int? width { get; set; } -- see video
+        //public int? weight { get; set; }
 
-    }
+        // For Audio files
+        //public string? artist { get; set; }
+        //public string? album { get; set; }
+        //public string? title { get; set; }
+        //public string? genre { get; set; }
+        //public string? trackno { get; set; }
 
-    public class FolderMetadata : Metadata
-    {
-        // in case of folder -> folderid is returned
-        public long folderid { get; set; }
-
-    }
-
-    public class ImageMetadata : Metadata
-    {
-        // relevant for image files
-        public int? width { get; set; }
-        public int? weight { get; set; }
-    }
-
-    public class AudioMetadata : Metadata
-    {
-        public string? artist { get; set; }
-        public string? album { get; set; }
-        public string? title { get; set; }
-        public string? genre { get; set; }
-        public string? trackno { get; set; }
-    }
-
-    public class VideoMetadata : Metadata
-    {
-        public int? width { get; set; }
-        public int? height { get; set; }
-        public float? duration { get; set; }
-        public float? fps { get; set; }
-        public string? videocodec { get; set; }
-        public string? audiocodec { get; set; }
-        public int? videobitrate { get; set; }
-        public int? audiobitrate { get; set; }
-        public int? audiosamplerate { get; set; }
-        public int? rotate { get; set; }
+        //// For video files
+        //public int? width { get; set; }
+        //public int? height { get; set; }
+        //public float? duration { get; set; }
+        //public float? fps { get; set; }
+        //public string? videocodec { get; set; }
+        //public string? audiocodec { get; set; }
+        //public int? videobitrate { get; set; }
+        //public int? audiobitrate { get; set; }
+        //public int? audiosamplerate { get; set; }
+        //public int? rotate { get; set; }
     }
 }

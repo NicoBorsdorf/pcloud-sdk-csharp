@@ -3,6 +3,7 @@ using pcloud_sdk_csharp.Requests;
 using pcloud_sdk_csharp.Responses;
 using System.Text.Json;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Net.Http.Json;
 
 namespace pcloud_sdk_csharp.Controllers
 {
@@ -18,10 +19,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-            header.Add("name", name);
-
-            var response = await client.PostAsync(baseURL + "createfolder", null);
+            var response = await client.PostAsJsonAsync(baseURL + "createfolder", $"{{folderid: {folderId}, name: {name}}}");
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
 
@@ -34,10 +32,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-            header.Add("name", name);
-
-            var response = await client.PostAsync(baseURL + "createfolderifnotexists", null);
+            var response = await client.PostAsJsonAsync(baseURL + "createfolderifnotexists", $"{{folderid: {folderId}, name: {name}}}");
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
 
@@ -57,14 +52,7 @@ namespace pcloud_sdk_csharp.Controllers
             query.Add("nofiles", req.NoFiles.ToString());
             query.Add("noshares", req.NoShares.ToString());
 
-            //header.Add("folderid", req.FolderId.ToString());
-            //header.Add("recursive", req.Recursive.ToString());
-            //header.Add("showdeleted", req.ShowDeleted.ToString());
-            //header.Add("nofiles", req.NoFiles.ToString());
-            //header.Add("noshares", req.NoShares.ToString());
-
             var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(baseURL + "listfolder", query)));
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
@@ -76,10 +64,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-            header.Add("toName", toName);
-
-            var response = await client.PostAsync(baseURL + "renamefolder", null);
+            var response = await client.PostAsJsonAsync(baseURL + "renamefolder", $"{{folderid: {folderId}, toName: {toName}}}");
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
@@ -90,10 +75,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-            header.Add("tofolderid", toFolderId.ToString());
-
-            var response = await client.PostAsync(baseURL + "renamefolder", null);
+            var response = await client.PostAsJsonAsync(baseURL + "movefolder", $"{{folderid: {folderId}, tofolderid: {toFolderId}}}");
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
@@ -106,9 +88,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-
-            var response = await client.PostAsync(baseURL + "deletefolder", null);
+            var response = await client.PostAsJsonAsync(baseURL + "deletefolder", $"{{folderid: {folderId}}}");
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
@@ -120,9 +100,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
-
-            var response = await client.PostAsync(baseURL + "deletefolderrecursive", null);
+            var response = await client.PostAsJsonAsync(baseURL + "deletefolderrecursive", $"{{folderid: {folderId}}}");
 
             return JsonSerializer.Deserialize<DeleteFolder>(await response.Content.ReadAsStringAsync());
         }
