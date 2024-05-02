@@ -14,10 +14,10 @@ namespace pcloud_sdk_csharp.Requests
         }
 
         public long FolderId { get; set; }
-        public int? Recursive { get; set; }
-        public int? ShowDeleted { get; set; }
-        public int? NoFiles { get; set; }
-        public int? NoShares { get; set; }
+        public int Recursive { get; set; }
+        public int ShowDeleted { get; set; }
+        public int NoFiles { get; set; }
+        public int NoShares { get; set; }
 
     }
 
@@ -147,7 +147,7 @@ namespace pcloud_sdk_csharp.Responses
     public class FileMetadata : Metadata
     {
         // in case of file -> fileid is returned
-        public long? fileid { get; set; }
+        public long fileid { get; set; }
 
     }
 

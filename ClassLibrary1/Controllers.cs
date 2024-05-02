@@ -1,20 +1,17 @@
 ﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
 using pcloud_sdk_csharp.Requests;
 using pcloud_sdk_csharp.Responses;
 using System.Text.Json;
-using System.Net.NetworkInformation;
-using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace pcloud_sdk_csharp.Controllers
 {
-    public class FolderController
+    public static class FolderController
     {
-        private readonly string baseURL = @"https://eapi.pcloud.com/";
-        private readonly HttpClient client = new();
+        private static readonly string baseURL = @"https://eapi.pcloud.com/";
+        private static readonly HttpClient client = new();
 
-        public async Task<Folder> CearteFolder(long folderId, string name, string token)
+        public static async Task<Folder> CearteFolder(long folderId, string name, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -30,7 +27,7 @@ namespace pcloud_sdk_csharp.Controllers
 
         }
 
-        public async Task<Folder> CearteFolderIfNotExists(long folderId, string name, string token)
+        public static async Task<Folder> CearteFolderIfNotExists(long folderId, string name, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -46,21 +43,33 @@ namespace pcloud_sdk_csharp.Controllers
 
         }
 
-        public async Task<Folder> ListFolder(long folderId, string token)
+        public static async Task<Folder> ListFolder(ListFolderRequest req, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", folderId.ToString());
+            var query = new Dictionary<string, string>();
+            query.Add("folderid", req.FolderId.ToString());
+            query.Add("recursive", req.Recursive.ToString());
+            query.Add("showdeleted", req.ShowDeleted.ToString());
+            query.Add("nofiles", req.NoFiles.ToString());
+            query.Add("noshares", req.NoShares.ToString());
 
-            var response = await client.GetAsync(baseURL + "listfolder");
+            //header.Add("folderid", req.FolderId.ToString());
+            //header.Add("recursive", req.Recursive.ToString());
+            //header.Add("showdeleted", req.ShowDeleted.ToString());
+            //header.Add("nofiles", req.NoFiles.ToString());
+            //header.Add("noshares", req.NoShares.ToString());
+
+            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(baseURL + "listfolder", query)));
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<Folder> RenameFolder(long folderId, string toName, string token)
+        public static async Task<Folder> RenameFolder(long folderId, string toName, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -74,7 +83,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
-        public async Task<Folder> MoveFolder(long folderId, long toFolderId, string token)
+        public static async Task<Folder> MoveFolder(long folderId, long toFolderId, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -90,7 +99,7 @@ namespace pcloud_sdk_csharp.Controllers
         }
 
 
-        public async Task<Folder> DeleteFolder(long folderId, string token)
+        public static async Task<Folder> DeleteFolder(long folderId, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -104,7 +113,7 @@ namespace pcloud_sdk_csharp.Controllers
             return JsonSerializer.Deserialize<Folder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<DeleteFolder> DeleteFolderRecursive(int folderId, string token)
+        public static async Task<DeleteFolder> DeleteFolderRecursive(int folderId, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
@@ -118,7 +127,7 @@ namespace pcloud_sdk_csharp.Controllers
             return JsonSerializer.Deserialize<DeleteFolder>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<Folder> CopyFolder(CopyFolderRequest req, string token)
+        public static async Task<Folder> CopyFolder(CopyFolderRequest req, string token)
         {
             var header = client.DefaultRequestHeaders;
             header.Clear();
