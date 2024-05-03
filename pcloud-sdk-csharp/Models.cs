@@ -88,8 +88,8 @@ namespace pcloud_sdk_csharp.Responses
     // Files
     public class UploadedFile : Response
     {
-        public List<long>? fileids { get; set; }
-        public List<Metadata>? metadata { get; set; }
+        public List<long> fileids { get; set; }
+        public List<Metadata> metadata { get; set; }
     }
 
     public class UploadProgress
