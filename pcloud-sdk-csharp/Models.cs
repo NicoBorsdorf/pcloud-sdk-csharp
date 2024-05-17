@@ -2,6 +2,36 @@
 
 namespace pcloud_sdk_csharp.Requests
 {
+
+    public class AuthorizeRequest : BaseRequest
+    {
+        public AuthorizeRequest(string client_Id, ResponseType responseType, string? client_Secret, string? redirectUri = null, string? state = null, bool? forceApprove = false)
+        {
+            if (responseType == ResponseType.token && redirectUri == null) throw new ArgumentNullException(nameof(redirectUri));
+            if (responseType == ResponseType.token && client_Secret == null) throw new ArgumentNullException(nameof(client_Secret));
+
+            Client_Id = client_Id;
+            Client_Secret = client_Secret;
+            Type = responseType;
+            RedirectUri = redirectUri;
+            State = state;
+            ForceApprove = forceApprove;
+        }
+
+        public string Client_Id { get; set; } = null!;
+        public string? Client_Secret { get; set; } = null!;
+        public ResponseType Type { get; set; }
+        public string? RedirectUri { get; set; }
+        public string? State { get; set; }
+        public bool? ForceApprove { get; set; } = false;
+
+        public enum ResponseType
+        {
+            code = 0,
+            token = 1
+        }
+    }
+
     public class ListFolderRequest : BaseRequest
     {
         public ListFolderRequest(long folderId, bool recursive = false, bool showDeleted = false, bool noFiles = false, bool noShares = false)
@@ -48,9 +78,9 @@ namespace pcloud_sdk_csharp.Requests
 
         public long FolderId { get; set; }
         public long ToFolderId { get; set; }
-        public int? NoOver { get; set; }
-        public int? SkipExisting { get; set; }
-        public int? CopyContentOnly { get; set; }
+        public int NoOver { get; set; }
+        public int SkipExisting { get; set; }
+        public int CopyContentOnly { get; set; }
     }
 
     public class UploadFileRequest : BaseRequest
@@ -85,19 +115,32 @@ namespace pcloud_sdk_csharp.Requests
 // response properties are written in small letters due to json mapping of ws reponse
 namespace pcloud_sdk_csharp.Responses
 {
+    // Auth
+    public class AuthResponse : Response
+    {
+        public string code { get; set; } = null!;
+        public string access_token { get; set; } = null!;
+        public string token_type { get; set; } = null!;
+        public string state { get; set; } = null!;
+        public int locationid { get; set; }
+        public int uid { get; set; }
+        public string hostname { get; set; } = null!;
+    }
+
+
     // Files
     public class UploadedFile : Response
     {
-        public List<long> fileids { get; set; }
-        public List<Metadata> metadata { get; set; }
+        public List<long> fileids { get; set; } = null!;
+        public List<Metadata> metadata { get; set; } = null!;
     }
 
     public class UploadProgress
     {
         public long total { get; set; }
         public long uploaded { get; set; }
-        public string currentfile { get; set; }
-        public List<Metadata> files { get; set; }
+        public string currentfile { get; set; } = null!;
+        public List<Metadata> files { get; set; } = null!;
         public bool finished { get; set; }
     }
 
@@ -105,8 +148,8 @@ namespace pcloud_sdk_csharp.Responses
     public class Folder : Response
     {
         public bool created { get; set; }
-        public string id { get; set; }
-        public Metadata metadata { get; set; }
+        public string id { get; set; } = null!;
+        public Metadata metadata { get; set; } = null!;
     }
 
     public class DeleteFolder : Response
@@ -130,11 +173,11 @@ namespace pcloud_sdk_csharp.Responses
         public bool isfolder { get; set; }
         //public bool ismine { get; set; }
         //public bool isshared { get; set; }
-        public string name { get; set; }
+        public string name { get; set; } = null!;
         //public string id { get; set; }
         //public string? deletedfileid { get; set; }
-        public string created { get; set; }
-        public string modified { get; set; }
+        public string created { get; set; } = null!;
+        public string modified { get; set; } = null!;
         //public string icon { get; set; }
         //public long category { get; set; }
         //public bool thumb { get; set; }
