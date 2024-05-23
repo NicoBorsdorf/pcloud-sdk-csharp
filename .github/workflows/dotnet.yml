@@ -41,7 +41,7 @@ jobs:
         cd FiDa
         git checkout -b ${{ env.NEW_BRANCH }} main
         cp ../output/pcloud-sdk-csharp.dll ./Lib/pcloud-sdk-csharp.dll
-        git add /Lib/pcloud-sdk-csharp.dll
+        git add ./Lib/pcloud-sdk-csharp.dll
         git commit -m "Update DLL"
         git push origin ${{ env.NEW_BRANCH }}
 
