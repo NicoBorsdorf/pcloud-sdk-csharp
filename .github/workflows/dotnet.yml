@@ -23,34 +23,35 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release
     - name: Copy DLL to seperate dir
       run: |
         mkdir -p output
-        cp pcloud-sdk-csharp/pcloud-sdk-csharp/obj/Debug/net6.0/pcloud-sdk-csharp.dll output/
+        cp pcloud-sdk-csharp/bin/Release/net6.0/pcloud-sdk-csharp.dll output/
         
     - name: Deploy DLL to different repo
       env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: NicoBorsdorf/FiDa
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git clone --depth 1 https://github.com/${{ env.TRAGET_REPO }} FiDa
+        git clone --depth 1 https://x-access-token:${{ env.ACCESS_TOKEN }}@github.com/${{ env.TARGET_REPO }} FiDa
         cd FiDa
         git checkout -b ${{ env.NEW_BRANCH }} main
-        cp ../output/pcloud-sdk-csharp.dll ./Lib/ # Change this to the path of your .dll
-        git add pcloud-sdk-csharp.dll
+        cp ../output/pcloud-sdk-csharp.dll ./Lib/pcloud-sdk-csharp.dll
+        git add ./Lib/pcloud-sdk-csharp.dll
         git commit -m "Update DLL"
         git push origin ${{ env.NEW_BRANCH }}
 
     - name: Create Pull Request
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: NicoBorsdorf/FiDa
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
-        curl -X POST -H "Authorization: token ${{ env.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
+        curl -X POST -H "Authorization: token ${{ env.ACCESS_TOKEN }}" \
+          -H "Accept: application/vnd.github+json" \
           https://api.github.com/repos/${{ env.TARGET_REPO }}/pulls \
           -d "{\"title\":\"Update pcloud-sdk\",\"head\":\"${{ env.NEW_BRANCH }}\",\"base\":\"main\"}"
