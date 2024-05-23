@@ -27,7 +27,7 @@ jobs:
     - name: Copy DLL to seperate dir
       run: |
         mkdir -p output
-        cp pcloud-sdk-csharp/pcloud-sdk-csharp/bin/Release/net6.0/pcloud-sdk-csharp.dll output/
+        cp pcloud-sdk-csharp/bin/Release/net6.0/pcloud-sdk-csharp.dll output/
         
     - name: Deploy DLL to different repo
       env:
