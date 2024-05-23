@@ -277,7 +277,6 @@ namespace pcloud_sdk_csharp.Controllers
         }
     }
 
-
     public static class AuthController
     {
         private static readonly string OAuthUrl = "https://my.pcloud.com/oauth2/";
