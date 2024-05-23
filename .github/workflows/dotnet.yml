@@ -36,7 +36,7 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git clone --depth 1 https://github.com/${{ env.TRAGET_REPO }} FiDa
+        git clone --depth 1 https://github.com/${{ env.TARGET_REPO }} FiDa
         cd FiDa
         git checkout -b ${{ env.NEW_BRANCH }} main
         cp ../output/pcloud-sdk-csharp.dll ./Lib/ # Change this to the path of your .dll
