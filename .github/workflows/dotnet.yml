@@ -1,0 +1,56 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build an Deploy DLL
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Copy DLL to seperate dir
+      run: |
+        mkdir -p output
+        cp pcloud-sdk-csharp/pcloud-sdk-csharp/obj/Debug/net6.0/pcloud-sdk-csharp.dll output/
+        
+    - name: Deploy DLL to different repo
+      env:
+        TARGET_REPO: NicoBorsdorf/FiDa
+        NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git clone --depth 1 https://github.com/${{ env.TRAGET_REPO }} FiDa
+        cd FiDa
+        git checkout -b ${{ env.NEW_BRANCH }} main
+        cp ../output/pcloud-sdk-csharp.dll ./Lib/ # Change this to the path of your .dll
+        git add pcloud-sdk-csharp.dll
+        git commit -m "Update DLL"
+        git push origin ${{ env.NEW_BRANCH }}
+
+    - name: Create Pull Request
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET_REPO: NicoBorsdorf/FiDa
+        NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
+      run: |
+        curl -X POST -H "Authorization: token ${{ env.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ env.TARGET_REPO }}/pulls \
+          -d "{\"title\":\"Update pcloud-sdk\",\"head\":\"${{ env.NEW_BRANCH }}\",\"base\":\"main\"}"
