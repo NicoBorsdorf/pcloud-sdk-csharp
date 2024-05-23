@@ -32,7 +32,7 @@ jobs:
     - name: Deploy DLL to different repo
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        TARGET_REPO: NicoBorsdorf/FiDa.git
+        TARGET_REPO: NicoBorsdorf/FiDa
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
         git config --global user.name "github-actions[bot]"
@@ -48,10 +48,10 @@ jobs:
     - name: Create Pull Request
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        TARGET_REPO: NicoBorsdorf/FiDa.git
+        TARGET_REPO: NicoBorsdorf/FiDa
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
         curl -X POST -H "Authorization: token ${{ env.ACCESS_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
+          -H "Accept: application/vnd.github+json" \
           https://api.github.com/repos/${{ env.TARGET_REPO }}/pulls \
           -d "{\"title\":\"Update pcloud-sdk\",\"head\":\"${{ env.NEW_BRANCH }}\",\"base\":\"main\"}"
