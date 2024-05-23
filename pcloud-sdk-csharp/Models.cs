@@ -15,7 +15,7 @@ namespace pcloud_sdk_csharp.Requests
             Type = responseType;
             RedirectUri = redirectUri;
             State = state;
-            ForceApprove = forceApprove;
+            ForceApprove = forceApprove ?? false;
         }
 
         public string Client_Id { get; set; } = null!;
@@ -23,7 +23,7 @@ namespace pcloud_sdk_csharp.Requests
         public ResponseType Type { get; set; }
         public string? RedirectUri { get; set; }
         public string? State { get; set; }
-        public bool? ForceApprove { get; set; } = false;
+        public bool ForceApprove { get; set; }
 
         public enum ResponseType
         {

@@ -9,7 +9,7 @@ namespace pcloud_sdk_csharp.Controllers
 {
     public static class FolderController
     {
-        private static readonly string baseURL = @"https://eapi.pcloud.com/";
+        private static readonly string BaseURL = @"https://eapi.pcloud.com/";
         private static readonly HttpClient client = new();
 
         public static async Task<Folder> CearteFolder(long folderId, string name, string token)
@@ -19,7 +19,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "createfolder", $"{{folderid: {folderId}, name: {name}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "createfolder", $"{{folderid: {folderId}, name: {name}}}");
 
             return await response.Content.ReadFromJsonAsync<Folder>();
 
@@ -32,7 +32,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "createfolderifnotexists", $"{{folderid: {folderId}, name: {name}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "createfolderifnotexists", $"{{folderid: {folderId}, name: {name}}}");
 
             return await response.Content.ReadFromJsonAsync<Folder>();
 
@@ -54,7 +54,7 @@ namespace pcloud_sdk_csharp.Controllers
                 { "noshares", req.NoShares.ToString() }
             };
 
-            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(baseURL + "listfolder", query)));
+            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(BaseURL + "listfolder", query)));
 
             return await response.Content.ReadFromJsonAsync<Folder>();
         }
@@ -66,7 +66,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "renamefolder", $"{{folderid: {folderId}, toName: {toName}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "renamefolder", $"{{folderid: {folderId}, toName: {toName}}}");
 
             return await response.Content.ReadFromJsonAsync<Folder>();
         }
@@ -77,7 +77,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "movefolder", $"{{folderid: {folderId}, tofolderid: {toFolderId}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "movefolder", $"{{folderid: {folderId}, tofolderid: {toFolderId}}}");
 
             return await response.Content.ReadFromJsonAsync<Folder>();
         }
@@ -90,7 +90,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "deletefolder", $"{{folderid: {folderId}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "deletefolder", $"{{folderid: {folderId}}}");
 
             return await response.Content.ReadFromJsonAsync<Folder>();
         }
@@ -102,7 +102,7 @@ namespace pcloud_sdk_csharp.Controllers
             header.Authorization = new AuthenticationHeaderValue("Bearer", token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await client.PostAsJsonAsync(baseURL + "deletefolderrecursive", $"{{folderid: {folderId}}}");
+            var response = await client.PostAsJsonAsync(BaseURL + "deletefolderrecursive", $"{{folderid: {folderId}}}");
 
             return await response.Content.ReadFromJsonAsync<DeleteFolder>();
         }
@@ -129,7 +129,7 @@ namespace pcloud_sdk_csharp.Controllers
                 {"copycontentonly", req.CopyContentOnly.ToString() }
             };
 
-            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(baseURL + "copyfolder", query)));
+            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(BaseURL + "copyfolder", query)));
 
             return await response.Content.ReadFromJsonAsync<Folder>();
         }
@@ -137,7 +137,7 @@ namespace pcloud_sdk_csharp.Controllers
 
     public static class FileController
     {
-        private static readonly string baseURL = "https://eapi.pcloud.com/";
+        private static readonly string BaseURL = "https://eapi.pcloud.com/";
         private static readonly HttpClient client = new();
 
         public static async Task<UploadedFile?> UploadFile(UploadFileRequest req, string token)
@@ -161,7 +161,7 @@ namespace pcloud_sdk_csharp.Controllers
             };
             formData.Add(fileContent);
 
-            var response = await client.PostAsync(baseURL + "uploadfile", formData);
+            var response = await client.PostAsync(BaseURL + "uploadfile", formData);
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -175,7 +175,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             header.Add("hash", hash);
 
-            var response = await client.GetAsync(baseURL + "uplaodprogress");
+            var response = await client.GetAsync(BaseURL + "uplaodprogress");
 
             return await response.Content.ReadFromJsonAsync<UploadProgress>();
         }
@@ -190,7 +190,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("url", string.Join(" ", url));
 
-            var response = await client.GetAsync(baseURL + "downloadfile");
+            var response = await client.GetAsync(BaseURL + "downloadfile");
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -203,7 +203,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("url", string.Join(" ", url));
 
-            var response = await client.GetAsync(baseURL + "downloadfileasync");
+            var response = await client.GetAsync(BaseURL + "downloadfileasync");
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -217,7 +217,7 @@ namespace pcloud_sdk_csharp.Controllers
             headers.Add("fileid", fileId.ToString());
             headers.Add("tofolderid", toFolderId.ToString());
 
-            var response = await client.PostAsync(baseURL + "copyfile", null);
+            var response = await client.PostAsync(BaseURL + "copyfile", null);
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -230,7 +230,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("fileid", fileId.ToString());
 
-            var response = await client.GetAsync(baseURL + "checksumfile");
+            var response = await client.GetAsync(BaseURL + "checksumfile");
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -243,7 +243,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("fileid", fileId.ToString());
 
-            var response = await client.DeleteAsync(baseURL + "deletefile");
+            var response = await client.DeleteAsync(BaseURL + "deletefile");
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -258,7 +258,7 @@ namespace pcloud_sdk_csharp.Controllers
             headers.Add("fileid", fileId.ToString());
             headers.Add("toName", toName);
 
-            var response = await client.PostAsync(baseURL + "renamefile", null);
+            var response = await client.PostAsync(BaseURL + "renamefile", null);
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -271,7 +271,7 @@ namespace pcloud_sdk_csharp.Controllers
 
             headers.Add("fileid", fileId.ToString());
 
-            var response = await client.GetAsync(baseURL + "stat");
+            var response = await client.GetAsync(BaseURL + "stat");
 
             return await response.Content.ReadFromJsonAsync<UploadedFile>();
         }
@@ -280,83 +280,25 @@ namespace pcloud_sdk_csharp.Controllers
 
     public static class AuthController
     {
-        private static readonly string oauthUrl = "https://my.pcloud.com/oauth2/";
-        private static readonly string baseURL = "https://eapi.pcloud.com/";
+        private static readonly string OAuthUrl = "https://my.pcloud.com/oauth2/";
+        private static readonly string BaseURL = "https://eapi.pcloud.com/";
         private static readonly HttpClient client = new();
-        public static async Task<AuthResponse> Authorize(AuthorizeRequest req)
-        {
-            var headers = client.DefaultRequestHeaders;
-            headers.Clear();
-            headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+        public static Uri GetOAuthUrl(AuthorizeRequest req)
+        {
             var query = new Dictionary<string, string>
             {
                 { "client_id", req.Client_Id },
                 { "response_type", req.Type.ToString() },
-                { "redirect_uri", req.Type.ToString() },
-                { "state", req.State?.ToString() ?? "" },
-                { "force_reapprove", req.ForceApprove?.ToString() ?? "" }
+                { "force_reapprove", req.ForceApprove.ToString() }
             };
+            if (req.RedirectUri != null) query.Add("redirect_uri", req.RedirectUri.ToString());
+            if (req.State != null) query.Add("state", req.State.ToString());
 
-            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(oauthUrl + "authorize", query)));
-
-            // ResponseTypes | code = 0, token = 1
-            if (req.Type == 0)
-            {
-                var codeFlow = await response.Content.ReadFromJsonAsync<AuthCodeFlow>();
-                if (codeFlow == null) return null!;
-                if (codeFlow?.result == 0) return new AuthResponse { result = codeFlow.result, error = codeFlow.error };
-
-                var authRes = await OAuth_Token(req.Client_Id, req.Client_Secret!, codeFlow!.code);
-
-                return new AuthResponse
-                {
-                    access_token = authRes.access_token,
-                    code = codeFlow.code,
-                    hostname = codeFlow.hostname,
-                    locationid = codeFlow.locationid,
-                    result = authRes.result,
-                    state = codeFlow.state,
-                    token_type = authRes.token_type,
-                    uid = authRes.uid
-                };
-            }
-            else
-            {
-                var tokenFlow = await response.Content.ReadFromJsonAsync<OAuth_TokenResponse>();
-                if (tokenFlow == null) return null!;
-                if (tokenFlow?.result == 0) return new AuthResponse { result = tokenFlow.result, error = tokenFlow.error };
-
-                return new AuthResponse
-                {
-                    access_token = tokenFlow.access_token,
-                    code = tokenFlow.code,
-                    hostname = tokenFlow.hostname,
-                    locationid = tokenFlow.locationid,
-                    result = tokenFlow.result,
-                    state = tokenFlow.state,
-                    token_type = tokenFlow.token_type,
-                    uid = tokenFlow.uid
-                };
-            }
+            return new Uri(QueryHelpers.AddQueryString(OAuthUrl + "authorize", query));
         }
 
-        private class OAuth_TokenResponse : AuthCodeFlow
-        {
-            public string access_token { get; set; }
-            public string token_type { get; set; }
-            public int uid { get; set; }
-        }
-
-        public class AuthCodeFlow : Response
-        {
-            public string code { get; set; } = null!;
-            public string state { get; set; } = null!;
-            public int locationid { get; set; }
-            public string hostname { get; set; } = null!;
-        }
-
-        private static async Task<OAuth_TokenResponse> OAuth_Token(string client_id, string client_secret, string code)
+        public static async Task<AuthResponse> GetOAuth_Token(string client_id, string client_secret, string code)
         {
             var headers = client.DefaultRequestHeaders;
             headers.Clear();
@@ -369,9 +311,9 @@ namespace pcloud_sdk_csharp.Controllers
                 { "code", code },
             };
 
-            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(baseURL + "oauth2_token", query)));
+            var response = await client.GetAsync(new Uri(QueryHelpers.AddQueryString(BaseURL + "oauth2_token", query)));
 
-            return await response.Content.ReadFromJsonAsync<OAuth_TokenResponse>();
+            return await response.Content.ReadFromJsonAsync<AuthResponse>();
         }
     }
 }
