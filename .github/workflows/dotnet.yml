@@ -31,7 +31,7 @@ jobs:
         
     - name: Deploy DLL to different repo
       env:
-        TARGET_REPO: NicoBorsdorf/FiDa
+        TARGET_REPO: NicoBorsdorf/FiDa.git
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
         git config --global user.name "github-actions[bot]"
@@ -47,7 +47,7 @@ jobs:
     - name: Create Pull Request
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: NicoBorsdorf/FiDa
+        TARGET_REPO: NicoBorsdorf/FiDa.git
         NEW_BRANCH: update-plcoud-sdk-${{ github.sha }}
       run: |
         curl -X POST -H "Authorization: token ${{ env.GITHUB_TOKEN }}" \
