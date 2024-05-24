@@ -5,13 +5,11 @@ namespace pcloud_sdk_csharp.Requests
 
     public class AuthorizeRequest : BaseRequest
     {
-        public AuthorizeRequest(string client_Id, ResponseType responseType, string? client_Secret, string? redirectUri = null, string? state = null, bool? forceApprove = false)
+        public AuthorizeRequest(string client_Id, ResponseType responseType, string? redirectUri = null, string? state = null, bool? forceApprove = false)
         {
             if (responseType == ResponseType.token && redirectUri == null) throw new ArgumentNullException(nameof(redirectUri));
-            if (responseType == ResponseType.token && client_Secret == null) throw new ArgumentNullException(nameof(client_Secret));
 
             Client_Id = client_Id;
-            Client_Secret = client_Secret;
             Type = responseType;
             RedirectUri = redirectUri;
             State = state;
@@ -19,7 +17,6 @@ namespace pcloud_sdk_csharp.Requests
         }
 
         public string Client_Id { get; set; } = null!;
-        public string? Client_Secret { get; set; } = null!;
         public ResponseType Type { get; set; }
         public string? RedirectUri { get; set; }
         public string? State { get; set; }
