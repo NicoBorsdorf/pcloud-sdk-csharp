@@ -8,15 +8,15 @@
             FileName = fileName;
             UploadFile = uploadFile;
             ProgressHash = progressHash;
-            RenameIfExists = renameIfExists ? 1 : 0;
-            NoPartial = noPartial ? 1 : 0;
+            RenameIfExists = renameIfExists ? 1 : null;
+            NoPartial = noPartial ? 1 : null;
         }
 
         public long FolderId { get; private set; }
         public string FileName { get; private set; }
         public Stream UploadFile { get; private set; }
         public string? ProgressHash { get; private set; }
-        public int NoPartial { get; private set; }
-        public int RenameIfExists { get; private set; }
+        public int? NoPartial { get; private set; }
+        public int? RenameIfExists { get; private set; }
     }
 }

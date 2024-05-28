@@ -1,4 +1,5 @@
-﻿using pcloud_sdk_csharp.File.Requests;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using pcloud_sdk_csharp.File.Requests;
 using pcloud_sdk_csharp.File.Responses;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -26,8 +27,8 @@ namespace pcloud_sdk_csharp.File.Controller
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(req.FolderId.ToString()), "folderid");
             formData.Add(new StringContent(req.FileName), "filename");
-            formData.Add(new StringContent(req.NoPartial.ToString()), "nopartial");
-            formData.Add(new StringContent(req.RenameIfExists.ToString()), "renameifexists");
+            if (req.NoPartial != null) formData.Add(new StringContent(req.NoPartial.ToString()!), "nopartial");
+            if (req.RenameIfExists != null) formData.Add(new StringContent(req.RenameIfExists.ToString()!), "renameifexists");
             if (req.ProgressHash != null) formData.Add(new StringContent(req.ProgressHash), "´progresshash");
 
             var fileContent = new StreamContent(req.UploadFile);
@@ -50,9 +51,12 @@ namespace pcloud_sdk_csharp.File.Controller
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("hash", hash);
+            var query = new Dictionary<string, string>
+            {
+                {"hash", hash }
+            };
 
-            var response = await _client.GetAsync(_baseUrl + "uplaodprogress");
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "uplaodprogress", query));
 
             return await response.Content.ReadFromJsonAsync<UploadProgress?>();
         }
@@ -65,9 +69,12 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("url", string.Join(" ", url));
+            var query = new Dictionary<string, string>
+            {
+                {"url", string.Join(" ", url) }
+            };
 
-            var response = await _client.GetAsync(_baseUrl + "downloadfile");
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "downloadfile", query));
 
             return await response.Content.ReadFromJsonAsync<UploadedFile?>();
         }
@@ -78,9 +85,12 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("url", string.Join(" ", url));
+            var query = new Dictionary<string, string>
+            {
+                {"url", string.Join(" ", url) }
+            };
 
-            var response = await _client.GetAsync(_baseUrl + "downloadfileasync");
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "downloadfileasync", query));
 
             return await response.Content.ReadFromJsonAsync<UploadedFile?>();
         }
@@ -91,10 +101,15 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("fileid", fileId.ToString());
-            headers.Add("tofolderid", toFolderId.ToString());
+            var query = new Dictionary<string, string>
+            {
+                {"fileid", fileId.ToString() },
+                {"tofolderid", toFolderId.ToString() }
+            };
 
-            var response = await _client.PostAsync(_baseUrl + "copyfile", null);
+            var content = new FormUrlEncodedContent(query);
+            var response = await _client.PostAsync(_baseUrl + "downloadfileasync", content);
+
 
             return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
         }
@@ -107,7 +122,12 @@ namespace pcloud_sdk_csharp.File.Controller
 
             headers.Add("fileid", fileId.ToString());
 
-            var response = await _client.GetAsync(_baseUrl + "checksumfile");
+            var query = new Dictionary<string, string>
+            {
+                {"fileId", fileId.ToString() }
+            };
+
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "checksumfile", query));
 
             return await response.Content.ReadFromJsonAsync<UploadedFile?>();
         }
@@ -118,9 +138,12 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("fileid", fileId.ToString());
+            var query = new Dictionary<string, string>
+            {
+                {"fileId", fileId.ToString() }
+            };
 
-            var response = await _client.DeleteAsync(_baseUrl + "deletefile");
+            var response = await _client.DeleteAsync(QueryHelpers.AddQueryString(_baseUrl + "checksumfile", query));
 
             return await response.Content.ReadFromJsonAsync<DeleteFileResponse?>();
         }
@@ -132,10 +155,15 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("fileid", fileId.ToString());
-            headers.Add("toName", toName);
 
-            var response = await _client.PostAsync(_baseUrl + "renamefile", null);
+            var query = new Dictionary<string, string>
+            {
+                {"fileid", fileId.ToString() },
+                {"toName", toName }
+            };
+
+            var content = new FormUrlEncodedContent(query);
+            var response = await _client.PostAsync(_baseUrl + "renamefile", content);
 
             return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
         }
@@ -146,9 +174,12 @@ namespace pcloud_sdk_csharp.File.Controller
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            headers.Add("fileid", fileId.ToString());
+            var query = new Dictionary<string, string>
+            {
+                {"fileId", fileId.ToString() }
+            };
 
-            var response = await _client.GetAsync(_baseUrl + "stat");
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "stat", query));
 
             return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
         }

@@ -54,11 +54,11 @@ namespace pcloud_sdk_csharp.Folder.Controller
             var query = new Dictionary<string, string>
             {
                 { "folderid", req.FolderId.ToString() },
-                { "recursive", req.Recursive.ToString() },
-                { "showdeleted", req.ShowDeleted.ToString() },
-                { "nofiles", req.NoFiles.ToString() },
-                { "noshares", req.NoShares.ToString() }
             };
+            if (req.Recursive != null) query.Add("recursive", req.Recursive.ToString()!);
+            if (req.ShowDeleted != null) query.Add("showdeleted", req.ShowDeleted.ToString()!);
+            if (req.NoFiles != null) query.Add("nofiles", req.NoFiles.ToString()!);
+            if (req.NoShares != null) query.Add("noshares", req.NoShares.ToString()!);
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "listfolder", query)));
 
@@ -120,20 +120,14 @@ namespace pcloud_sdk_csharp.Folder.Controller
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            header.Add("folderid", req.FolderId.ToString());
-            header.Add("tofolderid", req.ToFolderId.ToString());
-            header.Add("noover", req.NoOver.ToString());
-            header.Add("skipexisting", req.SkipExisting.ToString());
-            header.Add("copycontentonly", req.CopyContentOnly.ToString());
-
             var query = new Dictionary<string, string>
             {
                 {"folderid", req.FolderId.ToString()},
                 {"tofolderid", req.ToFolderId.ToString()},
-                {"noover", req.NoOver.ToString()},
-                {"skipexisting", req.SkipExisting.ToString()},
-                {"copycontentonly", req.CopyContentOnly.ToString() }
             };
+            if (req.NoOver != null) query.Add("noover", req.NoOver.ToString()!);
+            if (req.SkipExisting != null) query.Add("skipexisting", req.SkipExisting.ToString()!);
+            if (req.CopyContentOnly != null) query.Add("copycontentonly", req.CopyContentOnly.ToString()!);
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "copyfolder", query)));
 

@@ -5,17 +5,17 @@
         public ListFolderRequest(long folderId, bool recursive = false, bool showDeleted = false, bool noFiles = false, bool noShares = false)
         {
             FolderId = folderId;
-            Recursive = recursive ? 1 : 0;
-            ShowDeleted = showDeleted ? 1 : 0;
-            NoFiles = noFiles ? 1 : 0;
-            NoShares = noShares ? 1 : 0;
+            Recursive = recursive ? 1 : null;
+            ShowDeleted = showDeleted ? 1 : null;
+            NoFiles = noFiles ? 1 : null;
+            NoShares = noShares ? 1 : null;
         }
 
         public long FolderId { get; private set; }
-        public int Recursive { get; private set; }
-        public int ShowDeleted { get; private set; }
-        public int NoFiles { get; private set; }
-        public int NoShares { get; private set; }
+        public int? Recursive { get; private set; }
+        public int? ShowDeleted { get; private set; }
+        public int? NoFiles { get; private set; }
+        public int? NoShares { get; private set; }
 
     }
 
@@ -39,15 +39,15 @@
         {
             FolderId = folderId;
             ToFolderId = toFolderId;
-            NoOver = noOver ? 1 : 0;
-            SkipExisting = skipExisting ? 1 : 0;
-            CopyContentOnly = copyContentOnly ? 1 : 0;
+            NoOver = noOver ? 1 : null;
+            SkipExisting = skipExisting ? 1 : null;
+            CopyContentOnly = copyContentOnly ? 1 : null;
         }
 
         public long FolderId { get; private set; }
         public long ToFolderId { get; private set; }
-        public int NoOver { get; private set; }
-        public int SkipExisting { get; private set; }
-        public int CopyContentOnly { get; private set; }
+        public int? NoOver { get; private set; }
+        public int? SkipExisting { get; private set; }
+        public int? CopyContentOnly { get; private set; }
     }
 }
