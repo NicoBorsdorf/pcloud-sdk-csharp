@@ -13,6 +13,5 @@ namespace pcloud_sdk_csharp.Streaming.Responses
     public class VideoStreamingResponse : Response
     {
         public List<Metadata>? variants { get; protected set; }
-
     }
 }
