@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace pcloud_sdk_csharp.Sharing.Controller
 {
-    internal class SharingController
+    public class SharingController
     {
         public SharingController(string access_token, string clientURL)
         {
