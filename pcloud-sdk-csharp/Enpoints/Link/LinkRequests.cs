@@ -44,7 +44,7 @@ namespace pcloud_sdk_csharp.Link.Requests
 
     public class ChangeLinkRequest
     {
-        public ChangeLinkRequest(long linkId, DateTime? expire, DateTime? deleteExpire, int? maxTraffic, int? maxDownloads, string? linkPasswort, bool shortLink = false, bool deleteShortLink = false,)
+        public ChangeLinkRequest(long linkId, DateTime? expire, DateTime? deleteExpire, int? maxTraffic, int? maxDownloads, string? linkPasswort, bool shortLink = false, bool deleteShortLink = false)
         {
             LinkId = linkId;
             ShortLink = shortLink ? 1 : null;
