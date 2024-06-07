@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-
-
-namespace pcloud_sdk_csharp.Base.Requests
+﻿namespace pcloud_sdk_csharp.Base.Requests
 {
     public class Tree
     {
