@@ -21,16 +21,16 @@ namespace pcloud_sdk_csharp.Sharing.Responses
 
     public class Share
     {
-        public string tomail { get; protected set; } = null!;
+        public string tomail { get; protected set; } = string.Empty;
         public bool cancreate { get; protected set; }
         public long folderid { get; protected set; }
-        public string sharerequestid { get; protected set; } = null!;
+        public string sharerequestid { get; protected set; } = string.Empty;
         public bool canread { get; protected set; }
         public DateTime expires { get; protected set; }
         public bool canmodify { get; protected set; }
-        public string message { get; protected set; } = null!;
+        public string message { get; protected set; } = string.Empty;
         public bool candelete { get; protected set; }
-        public string sharename { get; protected set; } = null!;
+        public string sharename { get; protected set; } = string.Empty;
         public DateTime created { get; protected set; }
     }
 
