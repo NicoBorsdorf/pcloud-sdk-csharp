@@ -10,6 +10,11 @@ namespace pcloud_sdk_csharp.Client
 {
     public class PCloudClient
     {
+        /**
+         * <summary>
+         * 
+         * </summary>
+         */
         public PCloudClient(string token, Uri? clientURL = null)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
