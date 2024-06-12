@@ -11,6 +11,11 @@ namespace pcloud_sdk_csharp.Auhtorize
         private readonly string _oAuthUrl = "https://my.pcloud.com/oauth2/";
         private readonly HttpClient _client = new();
 
+        /// <summary>
+        /// Generates URL for OAuth.
+        /// </summary>
+        /// <param name="req">The <see cref="AuthorizeRequest"/> object containing the request parameters.</param>
+        /// <returns><see cref="Uri"/> of the OAuth endpoint.</returns>
         public Uri GetOAuthUrl(AuthorizeRequest req)
         {
             var query = new Dictionary<string, string>
@@ -25,8 +30,23 @@ namespace pcloud_sdk_csharp.Auhtorize
             return new Uri(QueryHelpers.AddQueryString(_oAuthUrl + "authorize", query));
         }
 
-        public async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, string? baseURL = @"https://eapi.pcloud.com/")
+        /// <summary>
+        /// Gets OAuth token for API connection.
+        /// </summary>
+        /// <param name="client_id">Clinet Id of your PCloud application.</param>
+        /// <param name="client_secret">Clinet Secret of your PCloud application.</param>
+        /// <param name="code">Code returned after teh redirect from the <see cref="GetOAuthUrl(AuthorizeRequest)"/> URL</param>
+        /// <param name="baseURL">API URL depending on region, either api.plcoud.com or default eapi.plcoud.com in case if no URL is provided.</param>
+        /// <returns><see cref="AuthResponse"/></returns>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="client_id"/>, <paramref name="client_secret"/> or <paramref name="code"/> is null.
+        /// </exception>
+        public async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, string baseURL = @"https://eapi.pcloud.com/")
         {
+            if (client_id == null) throw new ArgumentNullException(nameof(client_id));
+            if (client_secret == null) throw new ArgumentNullException(nameof(client_secret));
+            if (code == null) throw new ArgumentNullException(nameof(code));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

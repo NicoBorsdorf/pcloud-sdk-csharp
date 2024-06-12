@@ -9,10 +9,19 @@ namespace pcloud_sdk_csharp.Sharing.Controller
 {
     public class SharingController
     {
+
+        /// <summary>
+        /// Creates new instance of controller for sharing endpoint.
+        /// </summary>
+        /// <param name="access_token">Access Token passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <param name="clientURL">API URL passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
+        /// </exception>
         public SharingController(string access_token, string clientURL)
         {
-            _token = access_token;
-            _baseUrl = clientURL;
+            _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
+            _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
         }
 
         private readonly string _baseUrl;

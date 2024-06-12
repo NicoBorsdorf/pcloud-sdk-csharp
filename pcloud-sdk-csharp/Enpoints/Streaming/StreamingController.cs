@@ -8,10 +8,19 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 {
     public class StreamingController
     {
-        public StreamingController(string token, string clientURL)
+
+        /// <summary>
+        /// Creates new instance of controller for streaming endpoint.
+        /// </summary>
+        /// <param name="access_token">Access Token passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <param name="clientURL">API URL passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
+        /// </exception>
+        public StreamingController(string access_token, string clientURL)
         {
-            _baseUrl = clientURL;
-            _token = token;
+            _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
+            _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
         }
 
         private readonly string _baseUrl;

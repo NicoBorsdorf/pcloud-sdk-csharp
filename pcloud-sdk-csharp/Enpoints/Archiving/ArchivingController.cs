@@ -11,18 +11,48 @@ namespace pcloud_sdk_csharp.Archiving.Controller
 {
     public class ArchivingController
     {
-        public ArchivingController(string access_token, string clientUrl)
+        /// <summary>
+        /// Creates new instance of controller for archiving endpoint.
+        /// </summary>
+        /// <param name="access_token">Access Token passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <param name="clientURL">API URL passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
+        /// </exception>
+        public ArchivingController(string access_token, string clientURL)
         {
-            _token = access_token;
-            _baseUrl = clientUrl;
+            _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
+            _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
         }
 
         private readonly string _baseUrl;
         private readonly string _token;
         private readonly HttpClient _client = new();
 
+        /// <summary>
+        /// Gets a ZIP file stream from the pCloud API based on the specified <see cref="ZipRequest"/>.
+        /// </summary>
+        /// <param name="req">The <see cref="ZipRequest"/> object containing the request parameters.</param>
+        /// <returns>When successful it returns a zip archive over the current API connection with all the files and directories in the requested tree.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// The method constructs the request headers and query parameters based on the properties of the <paramref name="req"/>.
+        /// If <paramref name="req.ForceDownload"/> is specified, the content type is set to "application/octet-stream",
+        /// otherwise it is set to "application/zip".
+        /// <br/> 
+        /// <br/> <see cref="ZipRequest">Request</see> parameters:
+        /// <br/> - tree: <see cref="Tree"/>
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - forcedownload: Boolean flag to force download of the ZIP file.
+        /// <br/> - filename: Optional filename for the ZIP file.
+        /// <br/> - timeoffset: Optional time offset parameter.
+        /// <br/> 
+        /// </remarks>
         public async Task<Stream> GetZip(ZipRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -44,8 +74,28 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             return await response.Content.ReadAsStreamAsync();
         }
 
+        /// <summary>
+        /// Gets a ZIP file link from the pCloud API based on the specified <see cref="ZipLinkRequest"/>.
+        /// </summary>
+        /// <param name="req">The <see cref="ZipLinkRequest"/> object containing the request parameters.</param>
+        /// <returns>On success it will return array hosts with servers that have the file.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> 
+        /// <br/> <see cref="ZipLinkRequest">Request</see> parameters:
+        /// <br/> - tree: <see cref="Tree"/>
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - maxspeed: Limits the download speed (in bytes per second) for this link.
+        /// <br/> - forcedownload: Boolean flag to force download of the ZIP file.
+        /// <br/> - filename: Optional filename for the ZIP file.
+        /// <br/> - timeoffset: Optional time offset parameter.
+        /// <br/> 
+        /// </remarks>
         public async Task<StreamingResponse?> GetZiplink(ZipLinkRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -68,18 +118,38 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
         }
 
+        /// <summary>
+        /// Saves a ZIP file on the pCloud server based on the specified <see cref="SaveZipRequest"/>.
+        /// </summary>
+        /// <param name="req">The <see cref="SaveZipRequest"/> object containing the request parameters.</param>
+        /// <returns><see cref="Task"/><![CDATA[<]]><see cref="SingleFileResponse"/><![CDATA[>]]> | null</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> 
+        /// <br/> <see cref="ZipLinkRequest">Request</see> parameters:
+        /// <br/> - tree: <see cref="Tree"/>
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br /> - progresshash: Key to retrieve the progress for the zipping process.
+        /// <br /> - timeoffset: Desired time offset.
+        /// <br /> - tofolderid: Folder id of the folder, where to save the ZIP archive.
+        /// <br /> - toname: Filename of the desired ZIP archive.
+        /// </remarks>
         public async Task<SingleFileResponse?> SaveZip(SaveZipRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var reqBody = new Dictionary<string, string>();
             var tree = req.Tree;
-
-            reqBody.Add("folderids", string.Join(",", tree.FolderIds));
-            reqBody.Add("fileids", string.Join(",", tree.FileIds));
+            var reqBody = new Dictionary<string, string>
+            {
+                { "folderids", string.Join(",", tree.FolderIds) },
+                { "fileids", string.Join(",", tree.FileIds) }
+            };
             if (tree.ExcludeFolderIds.Count > 0) reqBody.Add("excludefolderids", string.Join(",", tree.ExcludeFolderIds));
             if (tree.ExcludeFileIds.Count > 0) reqBody.Add("excludefileids", string.Join(",", tree.ExcludeFileIds));
 
@@ -94,8 +164,27 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
         }
 
+        /// <summary>
+        /// Gets an archive on the pCloud server based on the specified <see cref="ExtractArchiveRequest"/>.
+        /// </summary>
+        /// <param name="req">The <see cref="ExtractArchiveRequest"/> object containing the request parameters.</param>
+        /// <returns>Returns <see cref="ExtractArchiveResponse">metadata</see> from requested archive file.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> 
+        /// <br/> <see cref="ExtractArchiveRequest">Request</see> parameters:
+        /// <br/> - fileid: Id of archive file. 
+        /// <br/> - tofolderid : Id of destination folder. 
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br /> - nooutput: If set extraction output is not returned.
+        /// <br /> - overwrite: Specifies what to do if file to extract already exists in the folder, can be one of 'rename' (default), 'overwrite' and 'skip'.
+        /// <br /> - password: Password to use to extract a password protected archive.
+        /// </remarks>
         public async Task<ExtractArchiveResponse?> ExtractArchive(ExtractArchiveRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -116,8 +205,17 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             return await response.Content.ReadFromJsonAsync<ExtractArchiveResponse?>();
         }
 
+        /// <summary>
+        /// Gets the progress of an archive extraction operation from the pCloud server based on the specified progress hash.
+        /// </summary>
+        /// <param name="progressHash">The progress hash for tracking the extraction operation.</param>
+        /// <param name="maxLines">Optional maximum number of lines to retrieve from the progress log.</param>
+        /// <returns>Returns <see cref="ExtractArchiveResponse">metadata</see> with current exctraction progress.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="progressHash"/> is null.</exception>
         public async Task<ExtractArchiveResponse?> ExtractArchiveProgress(string progressHash, int? maxLines)
         {
+            if (progressHash == null) throw new ArgumentNullException(nameof(progressHash));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -134,8 +232,16 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             return await response.Content.ReadFromJsonAsync<ExtractArchiveResponse?>();
         }
 
+        /// <summary>
+        /// Asynchronously retrieves the progress of a ZIP file saving operation from the pCloud server based on the specified progress hash.
+        /// </summary>
+        /// <param name="progressHash">The progress hash for tracking the save operation.</param>
+        /// <returns>If there exists such zipping process, then the method returns <see cref="SaveZipProgoressResponse">metadata</see> of current saving progress.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <paramref name="progressHash"/> is null.</exception>
         public async Task<SaveZipProgoressResponse?> SaveZipProgress(string progressHash)
         {
+            if (progressHash == null) throw new ArgumentNullException(nameof(progressHash));
+
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
             headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
