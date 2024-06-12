@@ -3,13 +3,13 @@
 namespace pcloud_sdk_csharp.File.Responses
 {
     // Files
-    public class UploadedFile : Response
+    public class UploadedFileResponse : Response
     {
         public List<long>? fileids { get; protected set; }
         public List<Metadata>? metadata { get; protected set; }
     }
 
-    public class UploadProgress : Response
+    public class UploadProgressResponse : Response
     {
         public long? total { get; protected set; }
         public long? uploaded { get; protected set; }
