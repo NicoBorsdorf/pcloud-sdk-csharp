@@ -24,6 +24,26 @@ namespace pcloud_sdk_csharp.Link.Requests
         public int? ShortLink { get; private set; }
     }
 
+    public class DownloadLinkRequest
+    {
+        public DownloadLinkRequest(long fileId, string code, int? forceDownload, string? contentType, int? maxSpeed, int? skipFileName)
+        {
+            FileId = fileId;
+            Code = code;
+            ForceDownload = forceDownload;
+            ContentType = contentType;
+            MaxSpeed = maxSpeed;
+            SkipFileName = skipFileName;
+        }
+
+        public long FileId { get; private set; }
+        public string Code { get; private set; } = string.Empty;
+        public int? ForceDownload { get; private set; }
+        public string? ContentType { get; private set; }
+        public int? MaxSpeed { get; private set; }
+        public int? SkipFileName { get; private set; }
+    }
+
     public class CopyLinkRequest
     {
         public CopyLinkRequest(long fileId, string code, long toFolderId, string? toName, bool noOver = false)
