@@ -5,6 +5,8 @@ using pcloud_sdk_csharp.Streaming.Controller;
 using pcloud_sdk_csharp.Sharing.Controller;
 using pcloud_sdk_csharp.Link.Controller;
 using pcloud_sdk_csharp.Thumbnails.Controller;
+using pcloud_sdk_csharp.UploadLinks.Controller;
+using pcloud_sdk_csharp.Revisions.Controller;
 
 namespace pcloud_sdk_csharp.Client
 {
@@ -31,6 +33,8 @@ namespace pcloud_sdk_csharp.Client
             Sharing = new(token, clientURL);
             Links = new(token, clientURL);
             Thumbnails = new(token, clientURL);
+            UploadLinks = new(token, clientURL);
+            Revisions = new(token, clientURL);
         }
 
         public FolderController Folders { get; private set; }
@@ -40,5 +44,7 @@ namespace pcloud_sdk_csharp.Client
         public SharingController Sharing { get; private set; }
         public LinkController Links { get; private set; }
         public ThumbnailController Thumbnails { get; private set; }
+        public UploadLinksController UploadLinks { get; private set; }
+        public RevisionsController Revisions { get; private set; }
     }
 }
