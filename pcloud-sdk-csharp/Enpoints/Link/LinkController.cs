@@ -17,8 +17,8 @@ namespace pcloud_sdk_csharp.Link.Controller
         /// <summary>
         /// Creates new instance of controller for publik link endpoint.
         /// </summary>
-        /// <param name="access_token">Access Token passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
-        /// <param name="clientURL">API URL passed from the <see cref="pcloud_sdk_csharp.Client.PCloudClient"/></param>
+        /// <param name="access_token">Access Token passed from the <see cref="Client.PCloudClient"/></param>
+        /// <param name="clientURL">API URL passed from the <see cref="Client.PCloudClient"/></param>
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
         /// </exception>
