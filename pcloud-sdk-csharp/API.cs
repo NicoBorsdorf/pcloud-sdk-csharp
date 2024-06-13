@@ -15,22 +15,22 @@ namespace pcloud_sdk_csharp.Client
         /// The different endpoints can be used with the corresponding controller.
         /// </summary>
         /// <param name="token">Access token for API connection</param>
-        /// <param name = "clientURL" > API URL depending on region, either api.plcoud.com or default eapi.plcoud.com in case if no URL is provided.</param>
+        /// <param name = "clientURL" > API URL depending on region, either https://api.plcoud.com/ or default https://eapi.plcoud.com/ in case if no URL is provided.</param>
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="token"/> is null.
         /// </exception>
         public PCloudClient(string token, Uri? clientURL = null)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
-            string baseURL = clientURL?.ToString() ?? @"https://eapi.pcloud.com/";
+            if (clientURL == null) clientURL = new Uri("https://eapi.pcloud.com/");
 
-            Folders = new(token, baseURL);
-            Files = new(token, baseURL);
-            Streaming = new(token, baseURL);
-            Archiving = new(token, baseURL);
-            Sharing = new(token, baseURL);
-            Links = new(token, baseURL);
-            Thumbnails = new(token, baseURL);
+            Folders = new(token, clientURL);
+            Files = new(token, clientURL);
+            Streaming = new(token, clientURL);
+            Archiving = new(token, clientURL);
+            Sharing = new(token, clientURL);
+            Links = new(token, clientURL);
+            Thumbnails = new(token, clientURL);
         }
 
         public FolderController Folders { get; private set; }

@@ -18,13 +18,15 @@ namespace pcloud_sdk_csharp.Sharing.Controller
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
         /// </exception>
-        public SharingController(string access_token, string clientURL)
+        public SharingController(string access_token, Uri clientURL)
         {
             _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
             _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
+
+            if (!_baseUrl.AbsoluteUri.Last().Equals("/")) throw new ArgumentException(@"Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
         }
 
-        private readonly string _baseUrl;
+        private readonly Uri _baseUrl;
         private readonly string _token;
         private readonly HttpClient _client = new();
 
