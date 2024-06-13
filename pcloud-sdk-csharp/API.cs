@@ -10,11 +10,15 @@ namespace pcloud_sdk_csharp.Client
 {
     public class PCloudClient
     {
-        /**
-         * <summary>
-         * 
-         * </summary>
-         */
+        /// <summary>
+        /// Create instance of PCloud client which connects to the API.
+        /// The different endpoints can be used with the corresponding controller.
+        /// </summary>
+        /// <param name="token">Access token for API connection</param>
+        /// <param name = "clientURL" > API URL depending on region, either api.plcoud.com or default eapi.plcoud.com in case if no URL is provided.</param>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="token"/> is null.
+        /// </exception>
         public PCloudClient(string token, Uri? clientURL = null)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));

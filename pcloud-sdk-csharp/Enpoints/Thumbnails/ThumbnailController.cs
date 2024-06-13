@@ -27,8 +27,26 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
         private readonly string _token;
         private readonly string _baseUrl;
 
+        /// <summary>
+        /// Get a link to a thumbnail of a file.
+        /// </summary>
+        /// <param name="req">Request definition for /getthumblink endpoint.</param>
+        /// <returns>On success the same data as with getfilelink is returned with additional size property.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> <see cref="ThumbRequest">Request</see> parameters:
+        /// <br/> - fileid: Id of the file for thumb.
+        /// <br/> - size: WIDTHxHEIGHT.
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - crop: If set, then the thumb will be cropped.
+        /// <br/> - type: If set to png, then the thumb will be in png format.
+        /// <br/> 
+        /// </remarks>
         public async Task<GetThumbResponse?> GetThumbLink(ThumbRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -47,8 +65,26 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
             return await response.Content.ReadFromJsonAsync<GetThumbResponse?>();
         }
 
+        /// <summary>
+        /// Get a link to thumbnails of a list of files.
+        /// </summary>
+        /// <param name="req">Request definition for /getthumbslinks endpoint.</param>
+        /// <returns>The method returns an array <see cref="GetThumbLinksResponse.thumbs">thumbs</see> with objects. Each object has result and fileid set.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> <see cref="GetThumbLinksRequest">Request</see> parameters:
+        /// <br/> - fileids: Coma-separated list of fileids.
+        /// <br/> - size: WIDTHxHEIGHT.
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - crop: If set, then the thumb will be cropped.
+        /// <br/> - type: If set to png, then the thumb will be in png format.
+        /// <br/> 
+        /// </remarks>
         public async Task<GetThumbLinksResponse?> GetThumbsLinks(GetThumbLinksRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -67,11 +103,30 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
             return await response.Content.ReadFromJsonAsync<GetThumbLinksResponse?>();
         }
 
+        /// <summary>
+        /// Get a thumbnail of a file.
+        /// </summary>
+        /// <param name="req">Request definition for /getthumb endpoint.</param>
+        /// <returns>Resturns Stream of thumbnail for files.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> <see cref="ThumbRequest">Request</see> parameters:
+        /// <br/> - fileid: Id of the file for thumb.
+        /// <br/> - size: WIDTHxHEIGHT.
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - crop: If set, then the thumb will be cropped.
+        /// <br/> - type: If set to png, then the thumb will be in png format.
+        /// <br/> 
+        /// </remarks>
         public async Task<Stream?> GetThumb(ThumbRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("image/*"));
 
             var query = new Dictionary<string, string>
             {
@@ -86,8 +141,29 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
             return await response.Content.ReadAsStreamAsync();
         }
 
+        /// <summary>
+        /// Create a thumbnail of a file and save it in the current user's filesystem.
+        /// </summary>
+        /// <param name="req">Request definition for /savethumb endpoint.</param>
+        /// <returns>On success returns <see cref="SaveThumbnailResponse.metadata">metadata</see>, <see cref="SaveThumbnailResponse.width">width</see> and <see cref="SaveThumbnailResponse.height">height</see>.</returns>
+        /// <exception cref="ArgumentNullException">When <paramref name="req"/> is null.</exception>
+        /// <remarks>
+        /// <br/> <see cref="SaveThumbRequest">Request</see> parameters:
+        /// <br/> - fileid: Id of the file for thumb.
+        /// <br/> - size: WIDTHxHEIGHT.
+        /// <br/> - tofolderid: Folder id of the folder where to save the thumb.
+        /// <br/> - toname: Filename to save the thumb.
+        /// <br/>
+        /// <br/> Optional: 
+        /// <br/> - crop: If set, then the thumb will be cropped.
+        /// <br/> - type: If set to png, then the thumb will be in png format.
+        /// <br/> - noover: If set, then will rise error on overwriting.
+        /// <br/> 
+        /// </remarks>
         public async Task<SaveThumbnailResponse?> SaveThumb(SaveThumbRequest req)
         {
+            if (req == null) throw new ArgumentNullException(nameof(req));
+
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
