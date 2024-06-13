@@ -7,6 +7,7 @@ using pcloud_sdk_csharp.Link.Controller;
 using pcloud_sdk_csharp.Thumbnails.Controller;
 using pcloud_sdk_csharp.UploadLinks.Controller;
 using pcloud_sdk_csharp.Revisions.Controller;
+using pcloud_sdk_csharp.Trash.Controller;
 
 namespace pcloud_sdk_csharp.Client
 {
@@ -35,6 +36,7 @@ namespace pcloud_sdk_csharp.Client
             Thumbnails = new(token, clientURL);
             UploadLinks = new(token, clientURL);
             Revisions = new(token, clientURL);
+            Trash = new(token, clientURL);
         }
 
         public FolderController Folders { get; private set; }
@@ -46,5 +48,6 @@ namespace pcloud_sdk_csharp.Client
         public ThumbnailController Thumbnails { get; private set; }
         public UploadLinksController UploadLinks { get; private set; }
         public RevisionsController Revisions { get; private set; }
+        public TrashController Trash { get; private set; }
     }
 }
