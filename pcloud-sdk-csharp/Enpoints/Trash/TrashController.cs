@@ -9,14 +9,15 @@ using System.Net.Http.Json;
 namespace pcloud_sdk_csharp.Trash.Controller
 {
     public class TrashController
-    {/// <summary>
-     /// Creates new instance of controller for trash endpoint.
-     /// </summary>
-     /// <param name="access_token">Access Token passed from the <see cref="Client.PCloudClient"/></param>
-     /// <param name="clientURL">API URL passed from the <see cref="Client.PCloudClient"/></param>
-     /// <exception cref="ArgumentNullException">
-     /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
-     /// </exception>
+    {
+        /// <summary>
+        /// Creates new instance of controller for trash endpoint.
+        /// </summary>
+        /// <param name="access_token">Access Token passed from the <see cref="Client.PCloudClient"/></param>
+        /// <param name="clientURL">API URL passed from the <see cref="Client.PCloudClient"/></param>
+        /// <exception cref="ArgumentNullException">
+        /// When <paramref name="access_token"/> or <paramref name="clientURL"/> is null.
+        /// </exception>
         public TrashController(string access_token, Uri clientURL)
         {
             _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
