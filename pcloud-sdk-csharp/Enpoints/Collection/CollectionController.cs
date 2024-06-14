@@ -225,10 +225,10 @@ namespace pcloud_sdk_csharp.Collection.Controller
                     reqBody.Add("all", (bool)all ? "1" : "0");
                     break;
                 case true when positions != null:
-                    reqBody.Add("positions", string.Join(",", positions);
+                    reqBody.Add("positions", string.Join(",", positions));
                     break;
                 case true when fileIds != null:
-                    reqBody.Add("fileids", string.Join(",", fileIds);
+                    reqBody.Add("fileids", string.Join(",", fileIds));
                     break;
             }
 
