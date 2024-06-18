@@ -41,11 +41,13 @@ namespace pcloud_sdk_csharp.Auth.Controller
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="client_id"/>, <paramref name="client_secret"/> or <paramref name="code"/> is null.
         /// </exception>
-        public static async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, string baseURL = @"https://eapi.pcloud.com/")
+        public static async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, Uri? baseURL)
         {
             if (client_id == null) throw new ArgumentNullException(nameof(client_id));
             if (client_secret == null) throw new ArgumentNullException(nameof(client_secret));
             if (code == null) throw new ArgumentNullException(nameof(code));
+
+            if (baseURL == null) baseURL = new Uri("https://eapi.plcoud.com/");
 
             var headers = _client.DefaultRequestHeaders;
             headers.Clear();
