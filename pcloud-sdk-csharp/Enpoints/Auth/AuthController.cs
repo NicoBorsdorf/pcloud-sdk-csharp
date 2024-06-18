@@ -6,17 +6,17 @@ using System.Net.Http.Json;
 
 namespace pcloud_sdk_csharp.Auhtorize
 {
-    public class Auhtorize
+    public static class Authorize
     {
-        private readonly string _oAuthUrl = "https://my.pcloud.com/oauth2/";
-        private readonly HttpClient _client = new();
+        private static readonly string _oAuthUrl = "https://my.pcloud.com/oauth2/";
+        private static readonly HttpClient _client = new();
 
         /// <summary>
         /// Generates URL for OAuth.
         /// </summary>
         /// <param name="req">The <see cref="AuthorizeRequest"/> object containing the request parameters.</param>
         /// <returns><see cref="Uri"/> of the OAuth endpoint.</returns>
-        public Uri GetOAuthUrl(AuthorizeRequest req)
+        public static Uri GetOAuthUrl(AuthorizeRequest req)
         {
             var query = new Dictionary<string, string>
             {
@@ -41,7 +41,7 @@ namespace pcloud_sdk_csharp.Auhtorize
         /// <exception cref="ArgumentNullException">
         /// When <paramref name="client_id"/>, <paramref name="client_secret"/> or <paramref name="code"/> is null.
         /// </exception>
-        public async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, string baseURL = @"https://eapi.pcloud.com/")
+        public static async Task<AuthResponse?> GetOAuthToken(string client_id, string client_secret, string code, string baseURL = @"https://eapi.pcloud.com/")
         {
             if (client_id == null) throw new ArgumentNullException(nameof(client_id));
             if (client_secret == null) throw new ArgumentNullException(nameof(client_secret));
