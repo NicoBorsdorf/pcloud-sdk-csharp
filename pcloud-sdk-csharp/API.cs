@@ -27,8 +27,8 @@ namespace pcloud_sdk_csharp.Client
         public PCloudClient(string token, Uri? clientURL = null)
         {
             if (token == null) throw new ArgumentNullException(nameof(token));
-            if (clientURL != null && clientURL.AbsoluteUri.Last().Equals(char.Parse("/")) == false) throw new Exception("Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
             if (clientURL == null) clientURL = new Uri("https://eapi.pcloud.com/");
+            if (!clientURL.ToString().EndsWith("/")) throw new Exception("Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
 
             Folders = new(token, clientURL);
             Files = new(token, clientURL);
