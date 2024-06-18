@@ -25,7 +25,7 @@ namespace pcloud_sdk_csharp.Transfer.Controller
         {
             _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
 
-            if (!_baseUrl.AbsoluteUri.Last().Equals("/")) throw new ArgumentException(@"Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
+            if (!_baseUrl.ToString().EndsWith("/")) throw new Exception("Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
         }
 
         private readonly HttpClient _client = new();

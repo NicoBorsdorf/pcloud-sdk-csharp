@@ -23,7 +23,7 @@ namespace pcloud_sdk_csharp.Trash.Controller
             _token = access_token ?? throw new ArgumentNullException(nameof(access_token));
             _baseUrl = clientURL ?? throw new ArgumentNullException(nameof(clientURL));
 
-            if (!_baseUrl.AbsoluteUri.Last().Equals("/")) throw new ArgumentException(@"Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
+            if (!_baseUrl.ToString().EndsWith("/")) throw new Exception("Please append a / to the clientURL. E.g. https://eapi.pcloud.com/");
         }
 
         private readonly HttpClient _client = new();
