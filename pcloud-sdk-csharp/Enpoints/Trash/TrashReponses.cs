@@ -4,6 +4,6 @@ namespace pcloud_sdk_csharp.Trash.Responses
 {
     public class TrashReponse : SingleFileResponse
     {
-        public Metadata destination { get; protected set; } = null!;
+        public Metadata destination { get; set; } = null!;
     }
 }

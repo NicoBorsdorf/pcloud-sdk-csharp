@@ -4,15 +4,15 @@ namespace pcloud_sdk_csharp.Revisions.Responses
 {
     public class RevisionReponse : Response
     {
-        public List<RevisionMetadata> revisions { get; protected set; } = null!;
+        public List<RevisionMetadata> revisions { get; set; } = null!;
 
         public class RevisionMetadata
         {
-            public long revisionsid { get; protected set; }
-            public long size { get; protected set; }
-            public string hash { get; protected set; } = string.Empty;
-            public DateTime created { get; protected set; }
-            public Metadata metadata { get; protected set; } = null!;
+            public long revisionsid { get; set; }
+            public long size { get; set; }
+            public string hash { get; set; } = string.Empty;
+            public DateTime created { get; set; }
+            public Metadata metadata { get; set; } = null!;
         }
     }
 }

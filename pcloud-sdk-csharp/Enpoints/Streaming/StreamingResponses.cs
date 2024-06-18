@@ -5,13 +5,13 @@ namespace pcloud_sdk_csharp.Streaming.Responses
     // Streaming 
     public class StreamingResponse : Response
     {
-        public string? path { get; protected set; }
-        public DateTime? expires { get; protected set; }
-        public List<string>? hosts { get; protected set; }
+        public string? path { get; set; }
+        public DateTime? expires { get; set; }
+        public List<string>? hosts { get; set; }
     }
 
     public class VideoStreamingResponse : Response
     {
-        public List<Metadata>? variants { get; protected set; }
+        public List<Metadata>? variants { get; set; }
     }
 }

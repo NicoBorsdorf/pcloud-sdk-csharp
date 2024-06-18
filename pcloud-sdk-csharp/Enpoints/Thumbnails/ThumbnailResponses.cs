@@ -5,26 +5,26 @@ namespace pcloud_sdk_csharp.Thumbnails.Responses
 {
     public class SaveThumbnailResponse : Response
     {
-        public long? height { get; protected set; }
-        public long? width { get; protected set; }
-        public Metadata? metadata { get; protected set; }
+        public long? height { get; set; }
+        public long? width { get; set; }
+        public Metadata? metadata { get; set; }
     }
 
     public class GetThumbResponse : StreamingResponse
     {
-        public string? size { get; protected set; }
+        public string? size { get; set; }
     }
 
     public class GetThumbLinksResponse : Response
     {
-        public List<Thumbs>? thumbs { get; protected set; }
+        public List<Thumbs>? thumbs { get; set; }
 
         public class Thumbs : Response
         {
-            public string? size { get; protected set; }
-            public string? path { get; protected set; }
-            public long? fileid { get; protected set; }
-            public List<string>? hosts { get; protected set; }
+            public string? size { get; set; }
+            public string? path { get; set; }
+            public long? fileid { get; set; }
+            public List<string>? hosts { get; set; }
         }
     }
 

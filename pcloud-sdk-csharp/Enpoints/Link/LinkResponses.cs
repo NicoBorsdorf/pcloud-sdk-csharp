@@ -4,43 +4,43 @@ namespace pcloud_sdk_csharp.Link.Responses
 {
     public class ShortLinkResponse : Response
     {
-        public long? linkid { get; protected set; }
-        public string? shortcode { get; protected set; }
-        public string? shortlink { get; protected set; }
+        public long? linkid { get; set; }
+        public string? shortcode { get; set; }
+        public string? shortlink { get; set; }
     }
 
     public class LinkResponse : Response
     {
-        public long? linkid { get; protected set; }
-        public string? link { get; protected set; }
-        public string? code { get; protected set; }
+        public long? linkid { get; set; }
+        public string? link { get; set; }
+        public string? code { get; set; }
     }
 
     public class PubLinksResponse : Response
     {
-        public List<PubLinkMeta>? publinks { get; protected set; }
+        public List<PubLinkMeta>? publinks { get; set; }
 
         // only used internally
         public class PubLinkMeta
         {
-            public long linkid { get; protected set; }
-            public string code { get; protected set; } = string.Empty;
-            public string link { get; protected set; } = string.Empty;
-            public DateTime created { get; protected set; }
-            public DateTime modified { get; protected set; }
-            public Metadata? metadata { get; protected set; }
-            public bool? isfolder { get; protected set; }
-            public long? folderid { get; protected set; }
-            public long? fileid { get; protected set; }
-            public int? downloads { get; protected set; }
-            public int traffic { get; protected set; }
+            public long linkid { get; set; }
+            public string code { get; set; } = string.Empty;
+            public string link { get; set; } = string.Empty;
+            public DateTime created { get; set; }
+            public DateTime modified { get; set; }
+            public Metadata? metadata { get; set; }
+            public bool? isfolder { get; set; }
+            public long? folderid { get; set; }
+            public long? fileid { get; set; }
+            public int? downloads { get; set; }
+            public int traffic { get; set; }
 
-            public string? shortcode { get; protected set; }
-            public string? shortlink { get; protected set; }
+            public string? shortcode { get; set; }
+            public string? shortlink { get; set; }
 
-            public DateTime expires { get; protected set; }
-            public int? maxdownloads { get; protected set; }
-            public int? maxtraffic { get; protected set; }
+            public DateTime expires { get; set; }
+            public int? maxdownloads { get; set; }
+            public int? maxtraffic { get; set; }
         }
     }
 }

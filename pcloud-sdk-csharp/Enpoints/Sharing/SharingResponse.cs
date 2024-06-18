@@ -4,8 +4,8 @@ namespace pcloud_sdk_csharp.Sharing.Responses
 {
     public class ListSharesResponse : Response
     {
-        public ShareResponse? shares { get; protected set; }
-        public ShareResponse? requests { get; protected set; }
+        public ShareResponse? shares { get; set; }
+        public ShareResponse? requests { get; set; }
 
         public class ShareResponse
         {
@@ -16,22 +16,22 @@ namespace pcloud_sdk_csharp.Sharing.Responses
 
     public class ShareRequestInfoResponse : Response
     {
-        public Share? share { get; protected set; }
+        public Share? share { get; set; }
     }
 
     public class Share
     {
-        public string tomail { get; protected set; } = string.Empty;
-        public bool cancreate { get; protected set; }
-        public long folderid { get; protected set; }
-        public string sharerequestid { get; protected set; } = string.Empty;
-        public bool canread { get; protected set; }
-        public DateTime expires { get; protected set; }
-        public bool canmodify { get; protected set; }
-        public string message { get; protected set; } = string.Empty;
-        public bool candelete { get; protected set; }
-        public string sharename { get; protected set; } = string.Empty;
-        public DateTime created { get; protected set; }
+        public string tomail { get; set; } = string.Empty;
+        public bool cancreate { get; set; }
+        public long folderid { get; set; }
+        public string sharerequestid { get; set; } = string.Empty;
+        public bool canread { get; set; }
+        public DateTime expires { get; set; }
+        public bool canmodify { get; set; }
+        public string message { get; set; } = string.Empty;
+        public bool candelete { get; set; }
+        public string sharename { get; set; } = string.Empty;
+        public DateTime created { get; set; }
     }
 
 }

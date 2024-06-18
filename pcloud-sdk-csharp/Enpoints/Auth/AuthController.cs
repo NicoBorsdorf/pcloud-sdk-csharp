@@ -4,7 +4,7 @@ using pcloud_sdk_csharp.Auth.Responses;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace pcloud_sdk_csharp.Authorize
+namespace pcloud_sdk_csharp.Auth.Controller
 {
     public static class Authorize
     {
