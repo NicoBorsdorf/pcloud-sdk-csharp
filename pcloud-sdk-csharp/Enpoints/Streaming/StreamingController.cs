@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.Streaming.Requests;
 using pcloud_sdk_csharp.Streaming.Responses;
 using System.Net.Http.Headers;
@@ -66,7 +68,7 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getfilelink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getvideolink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getvideolinks", query)));
 
-            return await response.Content.ReadFromJsonAsync<VideoStreamingResponse?>();
+            return JsonConvert.DeserializeObject<VideoStreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -196,7 +198,7 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getaudiolink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -236,7 +238,7 @@ namespace pcloud_sdk_csharp.Streaming.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "gethlslink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>

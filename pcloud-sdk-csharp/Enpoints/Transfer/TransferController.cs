@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace pcloud_sdk_csharp.Transfer.Controller
 {
@@ -84,7 +80,7 @@ namespace pcloud_sdk_csharp.Transfer.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "uploadtransferprogress", query));
 
-            return await response.Content.ReadFromJsonAsync<UploadProgressResponse>();
+            return JsonConvert.DeserializeObject<UploadProgressResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

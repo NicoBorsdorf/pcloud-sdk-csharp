@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.Collection.Responses;
 using System.Net.Http.Headers;
@@ -52,7 +53,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
 
             var response = await _client.GetAsync(reqUrl);
 
-            return await response.Content.ReadFromJsonAsync<CollectionsResponse>();
+            return JsonConvert.DeserializeObject<CollectionsResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "collection_details", query));
 
-            return await response.Content.ReadFromJsonAsync<CollectionDetailsResponse>();
+            return JsonConvert.DeserializeObject<CollectionDetailsResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "collection_create", content);
 
-            return await response.Content.ReadFromJsonAsync<CollectionResponse>();
+            return JsonConvert.DeserializeObject<CollectionResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -145,7 +146,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PutAsync(_baseUrl + "collection_rename", content);
 
-            return await response.Content.ReadFromJsonAsync<CollectionResponse>();
+            return JsonConvert.DeserializeObject<CollectionResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
 
             var response = await _client.DeleteAsync(QueryHelpers.AddQueryString(_baseUrl + "collection_delete", query));
 
-            return await response.Content.ReadFromJsonAsync<Response>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "collection_linkfiles", content);
 
-            return await response.Content.ReadFromJsonAsync<LinkFilesResponse>();
+            return JsonConvert.DeserializeObject<LinkFilesResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -235,7 +236,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "collection_unlinkfiles", content);
 
-            return await response.Content.ReadFromJsonAsync<CollectionResponse>();
+            return JsonConvert.DeserializeObject<CollectionResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -264,7 +265,7 @@ namespace pcloud_sdk_csharp.Collection.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "collection_move", content);
 
-            return await response.Content.ReadFromJsonAsync<CollectionResponse>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
     }

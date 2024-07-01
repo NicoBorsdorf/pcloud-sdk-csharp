@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.Thumbnails.Requests;
 using pcloud_sdk_csharp.Thumbnails.Responses;
 using System.Net.Http.Headers;
@@ -64,7 +66,7 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getthumblink", query)));
 
-            return await response.Content.ReadFromJsonAsync<GetThumbResponse?>();
+            return JsonConvert.DeserializeObject<GetThumbResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getthumbslinks", query)));
 
-            return await response.Content.ReadFromJsonAsync<GetThumbLinksResponse?>();
+            return JsonConvert.DeserializeObject<GetThumbLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -185,7 +187,7 @@ namespace pcloud_sdk_csharp.Thumbnails.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "savethumb", content);
 
-            return await response.Content.ReadFromJsonAsync<SaveThumbnailResponse?>();
+            return JsonConvert.DeserializeObject<SaveThumbnailResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

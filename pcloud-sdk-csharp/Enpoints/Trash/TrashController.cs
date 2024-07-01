@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Responses;
 using pcloud_sdk_csharp.Trash.Responses;
@@ -53,7 +54,7 @@ namespace pcloud_sdk_csharp.Trash.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "trash_list", query));
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace pcloud_sdk_csharp.Trash.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "trash_restorepath", content);
 
-            return await response.Content.ReadFromJsonAsync<TrashReponse>();
+            return JsonConvert.DeserializeObject<TrashReponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace pcloud_sdk_csharp.Trash.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "trash_restore", content);
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>

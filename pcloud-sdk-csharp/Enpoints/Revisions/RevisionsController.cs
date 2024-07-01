@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Responses;
 using pcloud_sdk_csharp.Revisions.Responses;
@@ -47,7 +48,7 @@ namespace pcloud_sdk_csharp.Revisions.Controller
             };
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "createuploadlink", query));
 
-            return await response.Content.ReadFromJsonAsync<RevisionReponse>();
+            return JsonConvert.DeserializeObject<RevisionReponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace pcloud_sdk_csharp.Revisions.Controller
             };
             var response = await _client.PostAsJsonAsync(_baseUrl + "createuploadlink", $"{{\"fileid\": {fileId}, \"revisionid\":{revisionId}}}");
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

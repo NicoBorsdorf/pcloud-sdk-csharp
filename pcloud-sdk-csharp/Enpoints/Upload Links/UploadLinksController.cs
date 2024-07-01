@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.UploadLinks.Requests;
 using pcloud_sdk_csharp.UploadLinks.Responses;
@@ -68,7 +69,7 @@ namespace pcloud_sdk_csharp.UploadLinks.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "createuploadlink", content);
 
-            return await response.Content.ReadFromJsonAsync<UploadLinksResponse>();
+            return JsonConvert.DeserializeObject<UploadLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace pcloud_sdk_csharp.UploadLinks.Controller
 
             var response = await _client.GetAsync(_baseUrl + "createuploadlink");
 
-            return await response.Content.ReadFromJsonAsync<ListUploadLinksResponse>();
+            return JsonConvert.DeserializeObject<ListUploadLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>

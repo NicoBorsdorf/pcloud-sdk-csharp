@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Archiving.Requests;
 using pcloud_sdk_csharp.Archiving.Responses;
 using pcloud_sdk_csharp.Base.Requests;
+using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Responses;
 using pcloud_sdk_csharp.Streaming.Responses;
 using System.Net.Http.Headers;
@@ -117,7 +119,7 @@ namespace pcloud_sdk_csharp.Archiving.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getziplink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "savezip", content);
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -204,7 +206,7 @@ namespace pcloud_sdk_csharp.Archiving.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "extractarchive", content);
 
-            return await response.Content.ReadFromJsonAsync<ExtractArchiveResponse?>();
+            return JsonConvert.DeserializeObject<ExtractArchiveResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -231,7 +233,7 @@ namespace pcloud_sdk_csharp.Archiving.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "extractarchiveprogress", query)));
 
-            return await response.Content.ReadFromJsonAsync<ExtractArchiveResponse?>();
+            return JsonConvert.DeserializeObject<ExtractArchiveResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -256,7 +258,7 @@ namespace pcloud_sdk_csharp.Archiving.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "extractarchiveprogress", query)));
 
-            return await response.Content.ReadFromJsonAsync<SaveZipProgoressResponse?>();
+            return JsonConvert.DeserializeObject<SaveZipProgoressResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

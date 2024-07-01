@@ -3,6 +3,8 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using pcloud_sdk_csharp.Folder.Responses;
 using pcloud_sdk_csharp.Folder.Requests;
+using Newtonsoft.Json;
+using pcloud_sdk_csharp.Base.Responses;
 
 namespace pcloud_sdk_csharp.Folder.Controller
 {
@@ -49,7 +51,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "createfolder", $"{{folderid: {folderId}, name: {name}}}");
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "createfolderifnotexists", $"{{folderid: {folderId}, name: {name}}}");
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "listfolder", query)));
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "renamefolder", $"{{folderid: {folderId}, toName: {toName}}}");
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "movefolder", $"{{folderid: {folderId}, tofolderid: {toFolderId}}}");
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "deletefolder", $"{{folderid: {folderId}}}");
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -188,7 +190,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "deletefolderrecursive", $"{{folderid: {folderId}}}");
 
-            return await response.Content.ReadFromJsonAsync<DeleteFolderResponse?>();
+            return JsonConvert.DeserializeObject<DeleteFolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -227,7 +229,7 @@ namespace pcloud_sdk_csharp.Folder.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "copyfolder", query)));
 
-            return await response.Content.ReadFromJsonAsync<FolderResponse?>();
+            return JsonConvert.DeserializeObject<FolderResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 

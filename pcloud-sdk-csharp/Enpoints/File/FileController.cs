@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Requests;
 using pcloud_sdk_csharp.File.Responses;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace pcloud_sdk_csharp.File.Controller
 {
@@ -73,7 +77,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.PostAsync(_baseUrl + "uploadfile", formData);
 
-            return await response.Content.ReadFromJsonAsync<UploadedFileResponse?>();
+            return JsonConvert.DeserializeObject<UploadedFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -100,7 +104,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "uplaodprogress", query));
 
-            return await response.Content.ReadFromJsonAsync<UploadProgressResponse?>();
+            return JsonConvert.DeserializeObject<UploadProgressResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -128,7 +132,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "downloadfile", query));
 
-            return await response.Content.ReadFromJsonAsync<UploadedFileResponse?>();
+            return JsonConvert.DeserializeObject<UploadedFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -159,7 +163,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "downloadfileasync", query));
 
-            return await response.Content.ReadFromJsonAsync<UploadedFileResponse?>();
+            return JsonConvert.DeserializeObject<UploadedFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -185,7 +189,7 @@ namespace pcloud_sdk_csharp.File.Controller
             var response = await _client.PostAsync(_baseUrl + "downloadfileasync", content);
 
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -209,7 +213,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "checksumfile", query));
 
-            return await response.Content.ReadFromJsonAsync<UploadedFileResponse?>();
+            return JsonConvert.DeserializeObject<UploadedFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -231,7 +235,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.DeleteAsync(QueryHelpers.AddQueryString(_baseUrl + "checksumfile", query));
 
-            return await response.Content.ReadFromJsonAsync<DeleteFileResponse?>();
+            return JsonConvert.DeserializeObject<DeleteFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -261,7 +265,7 @@ namespace pcloud_sdk_csharp.File.Controller
             var content = new FormUrlEncodedContent(query);
             var response = await _client.PostAsync(_baseUrl + "renamefile", content);
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -283,7 +287,7 @@ namespace pcloud_sdk_csharp.File.Controller
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "stat", query));
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.Sharing.Requests;
 using pcloud_sdk_csharp.Sharing.Responses;
@@ -68,7 +69,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "sharefolder", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
                 response = await _client.GetAsync(_baseUrl + "listshares");
             }
 
-            return await response.Content.ReadFromJsonAsync<ListSharesResponse?>();
+            return JsonConvert.DeserializeObject<ListSharesResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "sharerequestinfo", query)));
 
-            return await response.Content.ReadFromJsonAsync<ShareRequestInfoResponse?>();
+            return JsonConvert.DeserializeObject<ShareRequestInfoResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "sharerequestinfo", $"{{sharerequestid: {sharerequestid}}}");
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -189,7 +190,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "sharerequestinfo", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "declineshare", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -237,7 +238,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "removeshare", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -265,7 +266,7 @@ namespace pcloud_sdk_csharp.Sharing.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "changeshare", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }

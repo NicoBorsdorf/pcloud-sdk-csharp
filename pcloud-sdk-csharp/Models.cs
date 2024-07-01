@@ -1,4 +1,8 @@
-﻿namespace pcloud_sdk_csharp.Base.Requests
+﻿using Newtonsoft.Json.Converters;
+using System.Numerics;
+using System.Text.Json.Serialization;
+
+namespace pcloud_sdk_csharp.Base.Requests
 {
     public class Tree
     {
@@ -30,14 +34,16 @@ namespace pcloud_sdk_csharp.Base.Responses
         public string name { get; set; } = null!;
         public string id { get; set; } = null!;
         public string? deletedfileid { get; set; }
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime created { get; set; }
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime modified { get; set; }
         public string? icon { get; set; }
         public long category { get; set; }
         public bool thumb { get; set; }
         public long size { get; set; }
         public string? contenttype { get; set; }
-        public long hash { get; set; }
+        public BigInteger hash { get; set; }
         public List<Metadata>? contents { get; set; }
         public bool isdeleted { get; set; }
         public string? path { get; set; }
@@ -64,5 +70,13 @@ namespace pcloud_sdk_csharp.Base.Responses
         public long? audiobitrate { get; set; }
         public long? audiosamplerate { get; set; }
         public long? rotate { get; set; }
+    }
+
+    public class CustomDateTimeConverter : IsoDateTimeConverter
+    {
+        public CustomDateTimeConverter()
+        {
+            DateTimeFormat = "ddd, dd MMM yyyy HH:mm:ss K";
+        }
     }
 }

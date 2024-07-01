@@ -1,4 +1,5 @@
 ﻿using pcloud_sdk_csharp.Base.Responses;
+using System.Text.Json.Serialization;
 
 namespace pcloud_sdk_csharp.Link.Responses
 {
@@ -26,7 +27,9 @@ namespace pcloud_sdk_csharp.Link.Responses
             public long linkid { get; set; }
             public string code { get; set; } = string.Empty;
             public string link { get; set; } = string.Empty;
+            [JsonConverter(typeof(CustomDateTimeConverter))]
             public DateTime created { get; set; }
+            [JsonConverter(typeof(CustomDateTimeConverter))]
             public DateTime modified { get; set; }
             public Metadata? metadata { get; set; }
             public bool? isfolder { get; set; }
@@ -38,6 +41,7 @@ namespace pcloud_sdk_csharp.Link.Responses
             public string? shortcode { get; set; }
             public string? shortlink { get; set; }
 
+            [JsonConverter(typeof(CustomDateTimeConverter))]
             public DateTime expires { get; set; }
             public int? maxdownloads { get; set; }
             public int? maxtraffic { get; set; }

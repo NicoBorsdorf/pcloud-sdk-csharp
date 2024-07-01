@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Responses;
 using pcloud_sdk_csharp.Link.Requests;
@@ -112,7 +113,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + endpoint, query)));
 
-            return await response.Content.ReadFromJsonAsync<LinkResponse?>();
+            return JsonConvert.DeserializeObject<LinkResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getpublinkdownload", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -176,7 +177,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "showpublink", query)));
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "copypubfile", query)));
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse?>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -230,7 +231,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(_baseUrl + "listpublinks");
 
-            return await response.Content.ReadFromJsonAsync<PubLinksResponse?>();
+            return JsonConvert.DeserializeObject<PubLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -246,7 +247,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(_baseUrl + "listplshort");
 
-            return await response.Content.ReadFromJsonAsync<PubLinksResponse?>();
+            return JsonConvert.DeserializeObject<PubLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -268,7 +269,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.DeleteAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getpubthumb", query)));
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -315,7 +316,7 @@ namespace pcloud_sdk_csharp.Link.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PutAsync(_baseUrl + "changepublink", content);
 
-            return await response.Content.ReadFromJsonAsync<Response?>();
+            return JsonConvert.DeserializeObject<Response?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -389,7 +390,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getpubthumblink", query)));
 
-            return await response.Content.ReadFromJsonAsync<GetThumbResponse?>();
+            return JsonConvert.DeserializeObject<GetThumbResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -428,7 +429,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getpubthumbslinks", query)));
 
-            return await response.Content.ReadFromJsonAsync<GetThumbLinksResponse?>();
+            return JsonConvert.DeserializeObject<GetThumbLinksResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -475,7 +476,7 @@ namespace pcloud_sdk_csharp.Link.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "savepubthumb", content);
 
-            return await response.Content.ReadFromJsonAsync<SaveThumbnailResponse?>();
+            return JsonConvert.DeserializeObject<SaveThumbnailResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -587,7 +588,7 @@ namespace pcloud_sdk_csharp.Link.Controller
             var content = new FormUrlEncodedContent(reqBody);
             var response = await _client.PostAsync(_baseUrl + "savepubzip", content);
 
-            return await response.Content.ReadFromJsonAsync<SingleFileResponse>();
+            return JsonConvert.DeserializeObject<SingleFileResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -632,7 +633,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getvideolink", query)));
 
-            return await response.Content.ReadFromJsonAsync<VideoStreamingResponse?>();
+            return JsonConvert.DeserializeObject<VideoStreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -671,7 +672,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getvideolink", query)));
 
-            return await response.Content.ReadFromJsonAsync<StreamingResponse?>();
+            return JsonConvert.DeserializeObject<StreamingResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
         /// <summary>
@@ -750,7 +751,7 @@ namespace pcloud_sdk_csharp.Link.Controller
 
             var response = await _client.GetAsync(new Uri(QueryHelpers.AddQueryString(_baseUrl + "getcollectionpublink", query)));
 
-            return await response.Content.ReadFromJsonAsync<LinkResponse>();
+            return JsonConvert.DeserializeObject<LinkResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
     }
 }
