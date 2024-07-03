@@ -4,9 +4,6 @@ using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.File.Requests;
 using pcloud_sdk_csharp.File.Responses;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace pcloud_sdk_csharp.File.Controller
 {

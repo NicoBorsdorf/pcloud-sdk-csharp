@@ -62,7 +62,7 @@ namespace pcloud_sdk_csharp.UploadLinks.Controller
                 {"folderid", req.FolderId.ToString() },
                 {"comment", req.Comment }
             };
-            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToLongDateString());
+            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToString("R"));
             if (req.MaxSpace != null) reqBody.Add("maxspace", req.MaxSpace.ToString()!);
             if (req.MaxFiles != null) reqBody.Add("maxfiles", req.MaxFiles.ToString()!);
 
@@ -135,7 +135,7 @@ namespace pcloud_sdk_csharp.UploadLinks.Controller
             {
                 {"uploadlinkid", req.UploadLinkId.ToString() }
             };
-            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToLongDateString());
+            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToString("R"));
             if (req.DeleteExpire != null) reqBody.Add("deleteexpire", req.DeleteExpire.ToString()!);
             if (req.MaxSpace != null) reqBody.Add("maxspace", req.MaxSpace.ToString()!);
             if (req.MaxFiles != null) reqBody.Add("maxfiles", req.MaxFiles.ToString()!);
@@ -176,7 +176,7 @@ namespace pcloud_sdk_csharp.UploadLinks.Controller
             {
                 {"uploadlinkid", req.UploadLinkId.ToString() }
             };
-            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToLongDateString());
+            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToString("R"));
             if (req.DeleteExpire != null) query.Add("deleteexpire", req.DeleteExpire.ToString()!);
             if (req.MaxSpace != null) query.Add("maxspace", req.MaxSpace.ToString()!);
             if (req.MaxFiles != null) query.Add("maxfiles", req.MaxFiles.ToString()!);

@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using pcloud_sdk_csharp.Base.Responses;
 using pcloud_sdk_csharp.Collection.Responses;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace pcloud_sdk_csharp.Collection.Controller
 {

@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Globalization;
 using System.Numerics;
-using System.Text.Json.Serialization;
 
 namespace pcloud_sdk_csharp.Base.Requests
 {
@@ -77,6 +78,36 @@ namespace pcloud_sdk_csharp.Base.Responses
         public CustomDateTimeConverter()
         {
             DateTimeFormat = "ddd, dd MMM yyyy HH:mm:ss K";
+        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value is DateTime dateTime)
+            {
+                string dateString = dateTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture);
+                writer.WriteValue(dateString);
+            }
+            else
+            {
+                base.WriteJson(writer, value, serializer);
+            }
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.String)
+            {
+                string dateString = (string)reader.Value;
+                if (DateTime.TryParseExact(dateString, DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime parsedDate))
+                {
+                    return parsedDate;
+                }
+                else
+                {
+                    throw new JsonSerializationException($"Cannot convert invalid date string {dateString} to DateTime.");
+                }
+            }
+
+            return base.ReadJson(reader, objectType, existingValue, serializer);
         }
     }
 }

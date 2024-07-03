@@ -106,7 +106,7 @@ namespace pcloud_sdk_csharp.Link.Controller
                 { "fileid", req.FileId.ToString() }
             };
             if (req.ShortLink != null) query.Add("shortlink", req.ShortLink.ToString()!);
-            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToLongDateString());
+            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToString("R"));
             if (req.MaxDownloads != null) query.Add("maxdownloads", req.MaxDownloads.ToString()!);
             if (req.MaxTraffic != null) query.Add("maxtraffic", req.MaxTraffic.ToString()!);
             if (req.LinkPassword != null) query.Add("linkpassword", req.LinkPassword);
@@ -307,8 +307,8 @@ namespace pcloud_sdk_csharp.Link.Controller
             };
             if (req.ShortLink != null) reqBody.Add("shortlink", req.ShortLink.ToString()!);
             if (req.DeleteShortLink != null) reqBody.Add("deleteshortlink", req.DeleteShortLink.ToString()!);
-            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToLongDateString());
-            if (req.DeleteExpire != null) reqBody.Add("deleteexpire", req.DeleteExpire.Value.ToLongDateString());
+            if (req.Expire != null) reqBody.Add("expire", req.Expire.Value.ToString("R"));
+            if (req.DeleteExpire != null) reqBody.Add("deleteexpire", req.DeleteExpire.Value.ToString("R"));
             if (req.MaxTraffic != null) reqBody.Add("maxtraffic", req.MaxTraffic.ToString()!);
             if (req.MaxDownloads != null) reqBody.Add("maxdownloads", req.MaxDownloads.ToString()!);
             if (req.LinkPasswort != null) reqBody.Add("linkpassword", req.LinkPasswort);
@@ -745,7 +745,7 @@ namespace pcloud_sdk_csharp.Link.Controller
             {
                 { "collectionid", req.CollectionId.ToString() },
             };
-            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToLongDateString());
+            if (req.Expire != null) query.Add("expire", req.Expire.Value.ToString("R"));
             if (req.MaxDownloads != null) query.Add("maxdownloads", req.MaxDownloads.ToString()!);
             if (req.MaxTraffic != null) query.Add("maxtraffic", req.MaxTraffic.ToString()!);
 
