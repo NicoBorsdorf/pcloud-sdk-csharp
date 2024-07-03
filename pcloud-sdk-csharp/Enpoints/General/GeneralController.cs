@@ -38,6 +38,7 @@ namespace pcloud_sdk_csharp.General.Controller
         {
             var header = _client.DefaultRequestHeaders;
             header.Clear();
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "getdigest");
 
@@ -53,6 +54,7 @@ namespace pcloud_sdk_csharp.General.Controller
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "userinfo");
 
@@ -67,6 +69,7 @@ namespace pcloud_sdk_csharp.General.Controller
         {
             var header = _client.DefaultRequestHeaders;
             header.Clear();
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "supportedlanguages");
 
@@ -86,6 +89,7 @@ namespace pcloud_sdk_csharp.General.Controller
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.PostAsJsonAsync(_baseUrl + "setlanguage", $"{{\"language\": \"{lang}\"}}");
 
@@ -114,6 +118,7 @@ namespace pcloud_sdk_csharp.General.Controller
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var reqBody = new Dictionary<string, string>
             {
@@ -137,6 +142,7 @@ namespace pcloud_sdk_csharp.General.Controller
         {
             var header = _client.DefaultRequestHeaders;
             header.Clear();
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "currentserver");
 
@@ -156,6 +162,7 @@ namespace pcloud_sdk_csharp.General.Controller
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var query = new Dictionary<string, string>();
             if (req.DiffId != null) query.Add("diffid", req.DiffId.ToString()!);
@@ -165,14 +172,7 @@ namespace pcloud_sdk_csharp.General.Controller
             if (req.Limit != null) query.Add("limit", req.Limit.ToString()!);
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "diff", query));
-            //var responseString = await response.Content.ReadAsStringAsync();
 
-            //var diffResponse = JsonConvert.DeserializeObject<DiffResponse>(responseString);
-            //if (diffResponse == null) return null;
-            //var eventTypeString = (string)JsonConvert.DeserializeObject(responseString)?.GetType().GetProperty("event")?.GetValue(diffResponse, null)!;
-            //diffResponse.eventType = eventTypeString != null ? (Event)Enum.Parse(typeof(Event), eventTypeString) : null;
-            //
-            //return diffResponse;
             return JsonConvert.DeserializeObject<DiffResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
@@ -186,20 +186,14 @@ namespace pcloud_sdk_csharp.General.Controller
             var header = _client.DefaultRequestHeaders;
             header.Clear();
             header.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var query = new Dictionary<string, string>
             {
                 {"fileid", fileId.ToString() }
             };
             var response = await _client.GetAsync(QueryHelpers.AddQueryString(_baseUrl + "getfilehistory", query));
-            //var responseString = await response.Content.ReadAsStringAsync();
 
-            //var diffResponse = JsonConvert.DeserializeObject<DiffResponse>(responseString);
-            //if (diffResponse == null) return null;
-            //var eventTypeString = (string)JsonConvert.DeserializeObject(responseString)?.GetType().GetProperty("event")?.GetValue(diffResponse, null)!;
-            //diffResponse.eventType = eventTypeString != null ? (Event)Enum.Parse(typeof(Event), eventTypeString) : null;
-            //
-            //return diffResponse;
             return JsonConvert.DeserializeObject<FileHistoryResponse?>(await response.Content.ReadAsStringAsync(), new JsonSerializerSettings { Converters = { new CustomDateTimeConverter() } });
         }
 
@@ -211,6 +205,7 @@ namespace pcloud_sdk_csharp.General.Controller
         {
             var header = _client.DefaultRequestHeaders;
             header.Clear();
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "getip");
 
@@ -228,6 +223,7 @@ namespace pcloud_sdk_csharp.General.Controller
         {
             var header = _client.DefaultRequestHeaders;
             header.Clear();
+            header.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await _client.GetAsync(_baseUrl + "getapiserver");
 
