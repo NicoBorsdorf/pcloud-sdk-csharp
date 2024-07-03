@@ -42,6 +42,7 @@ namespace pcloud_sdk_csharp.Client
             Revisions = new(token, clientURL);
             Trash = new(token, clientURL);
             Collection = new(token, clientURL);
+            General = new(token, clientURL);
         }
 
 
