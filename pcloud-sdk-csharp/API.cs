@@ -9,6 +9,7 @@ using pcloud_sdk_csharp.UploadLinks.Controller;
 using pcloud_sdk_csharp.Revisions.Controller;
 using pcloud_sdk_csharp.Trash.Controller;
 using pcloud_sdk_csharp.Collection.Controller;
+using pcloud_sdk_csharp.General.Controller;
 
 namespace pcloud_sdk_csharp.Client
 {
@@ -55,5 +56,6 @@ namespace pcloud_sdk_csharp.Client
         public RevisionsController Revisions { get; private set; }
         public TrashController Trash { get; private set; }
         public CollectionController Collection { get; private set; }
+        public GeneralController General { get; private set; }
     }
 }
